@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".RegisterActivityProject"
+        android:background="#eeeeee"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_registeractivity_top"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/color_minefragment_top">
+
+            <ImageView
+                android:id="@+id/iv_registeractivity_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_left_back"
+                android:clickable="true"
+                android:onClick="onClick" />
+
+            <TextView
+                android:id="@+id/tv_registeractivity_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/iv_registeractivity_back"
+                android:text="Registration page"
+                android:textColor="#fff"
+                android:textSize="20dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_registeractivity_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/rl_registeractivity_top"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            >
+            <!-- 第一个文本编辑框  输入用户名 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_registeractivity_projectname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Project name"/>
+
+            </LinearLayout>
+            <!-- 第1个文本编辑框  输入名字 -->
+            <EditText
+                android:id="@+id/et_registeractivity_projectname"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:hint="Please enter project username" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_registeractivity_deadline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Deadline："/>
+
+            </LinearLayout>
+            <!-- 第2个文本编辑框  输入DDL -->
+            <EditText
+                android:id="@+id/et_registeractivity_deadline"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:hint="Please enter the Deadline"
+                android:inputType="text" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+
+                android:id="@+id/rl_registeractivity_part2"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="250dp">
+
+                <!-- 第二个部分，动态生成列表 -->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_registeractivity_task"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="task1 and workers：" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/et_registeractivity_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Please describe the task"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/et_registeractivity_worker"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center_vertical"
+                    android:hint="Please select a worker"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/et_registeractivity_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="80dp"
+                    android:gravity="center_vertical"
+                    android:hint="the State"
+                    android:inputType="text"
+                    android:text="onGoning" />
+
+
+                <Button
+                    android:id="@+id/bt_registeractivity_add"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="140dp"
+                    android:background="@drawable/selector_loginactivity_button"
+                    android:onClick="onClick_add"
+                    android:text="ADD"
+                    android:textColor="#fff" />
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/bt_registeractivity_register"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/selector_loginactivity_button"
+                android:onClick="onClick"
+                android:text="Sign up"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
