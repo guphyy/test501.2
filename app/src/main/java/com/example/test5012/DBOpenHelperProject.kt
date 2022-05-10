@@ -7,16 +7,16 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DBOpenHelperProject (context: Context?):
         SQLiteOpenHelper(context, "db_project", null, 1) {
-            private val db: SQLiteDatabase
-            override fun onCreate(db: SQLiteDatabase) {
+            private val db: SQLiteDatabase = readableDatabase
+    override fun onCreate(db: SQLiteDatabase) {
                 db.execSQL(
                     "CREATE TABLE IF NOT EXISTS newProject(" +
                             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                            "projectName TEXT," +
-                            "deadline TEXT," +
-                            "task, TEXT," +
-                            "worker, TEXT," +
-                            "state, TEXT)"
+                            "projectName TEXT1," +
+                            "deadline TEXT2," +
+                            "task, TEXT3," +
+                            "worker, TEXT4," +
+                            "state, TEXT5)"
 
                 )
             }
@@ -75,7 +75,4 @@ class DBOpenHelperProject (context: Context?):
             return list
         }
 
-    init {
-        db = readableDatabase
-    }
 }

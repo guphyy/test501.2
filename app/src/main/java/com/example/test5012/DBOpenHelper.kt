@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DBOpenHelper(context: Context?) :
     SQLiteOpenHelper(context, "db_test", null, 1) {
-    private val db: SQLiteDatabase
+    private val db: SQLiteDatabase = readableDatabase
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "CREATE TABLE IF NOT EXISTS newUser(" +
@@ -70,7 +70,4 @@ class DBOpenHelper(context: Context?) :
             return list
         }
 
-    init {
-        db = readableDatabase
-    }
 }

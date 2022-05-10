@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".RegisterActivityProject"
@@ -106,7 +105,7 @@
 
                 android:id="@+id/rl_registeractivity_part2"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="400dp"
                 android:layout_marginTop="250dp">
 
                 <!-- 第二个部分，动态生成列表 -->
@@ -125,45 +124,68 @@
 
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_registeractivity_task"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:hint="Please describe the task"
-                    android:inputType="text" />
 
-                <EditText
-                    android:id="@+id/et_registeractivity_worker"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="40dp"
-                    android:gravity="center_vertical"
-                    android:hint="Please select a worker"
-                    android:inputType="text" />
+                <LinearLayout
+                    android:id="@+id/project_list_group"
+                    android:layout_width="500dip"
+                    android:layout_height="500dip"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/et_registeractivity_state"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="80dp"
-                    android:gravity="center_vertical"
-                    android:hint="the State"
-                    android:inputType="text"
-                    android:text="onGoning" />
+                    <EditText
+                        android:id="@+id/et_registeractivity_task"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="Please describe the task"
+                        android:inputType="text" />
 
+                    <EditText
+                        android:id="@+id/et_registeractivity_worker"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_vertical"
+                        android:hint="Please select a worker"
+                        android:inputType="text" />
+
+                    <EditText
+                        android:id="@+id/et_registeractivity_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_vertical"
+                        android:hint="the State"
+                        android:inputType="text"
+                        android:text="onGoning" />
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/add_here"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="55dp"
+                            android:orientation="vertical"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </LinearLayout>
+                    </ScrollView>
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/bt_registeractivity_add"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="140dp"
+                    android:layout_marginTop="150dp"
                     android:background="@drawable/selector_loginactivity_button"
-                    android:onClick="onClick_add"
+                    android:onClick="onClick"
                     android:text="ADD"
                     android:textColor="#fff" />
 
@@ -175,7 +197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="0dp"
                 android:background="@drawable/selector_loginactivity_button"
                 android:onClick="onClick"
                 android:text="Sign up"

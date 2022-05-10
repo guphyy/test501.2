@@ -27,7 +27,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private var mEtLoginactivityPassword: EditText? = null
     private var mLlLoginactivityTwo: LinearLayout? = null
     private var mBtLoginactivityLogin: Button? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         myLoginActivity = ActivityLoginBinding.inflate(layoutInflater)
