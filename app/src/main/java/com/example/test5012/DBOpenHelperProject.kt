@@ -12,11 +12,11 @@ class DBOpenHelperProject (context: Context?):
                 db.execSQL(
                     "CREATE TABLE IF NOT EXISTS newProject(" +
                             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                            "projectName TEXT1," +
-                            "deadline TEXT2," +
-                            "task, TEXT3," +
-                            "worker, TEXT4," +
-                            "state, TEXT5)"
+                            "projectName TEXT," +
+                            "deadline TEXT," +
+                            "task, TEXT," +
+                            "worker, TEXT," +
+                            "state, TEXT)"
 
                 )
             }
@@ -43,7 +43,7 @@ class DBOpenHelperProject (context: Context?):
             "INSERT INTO newProject (projectName,deadline,task,worker,state) VALUES(?,?,?,?,?)",
             arrayOf<Any>(projectName, deadline, task, worker, state)
         )
-        db.close()
+        //db.close()
     }
 
     fun delete(projectName: String, deadline: String, task: String, worker: String, state: String) {

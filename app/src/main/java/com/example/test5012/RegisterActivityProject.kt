@@ -63,7 +63,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 finish()
         }
             R.id.bt_registeractivity_register -> {
-                val addPart = findViewById<LinearLayout>(R.id.add_here)
+
                 val projectName = mEtRegisterActivityProjectname!!.text.toString().trim() { it <= ' ' }
                 val deadline = mEtRegisterActivityDeadline!!.text.toString().trim() { it <= ' ' }
                 val task = mEtRegisterActivityTask!!.text.toString().trim() { it <= ' ' }
@@ -88,18 +88,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     ).show()
                 }
 
-                    val taskAdd = mEtRegisterActivityTaskAdd!!.text.toString().trim() { it <= ' ' }
-                    val workerAdd = mEtRegisterActivityWorkerAdd!!.text.toString().trim() { it <= ' ' }
-                    val stateAdd = mEtRegisterActivityStateAdd!!.text.toString().trim() { it <= ' ' }
-                    if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(taskAdd) && !TextUtils.isEmpty(workerAdd) && !TextUtils.isEmpty(stateAdd)) {
-                        mDBOpenHelperProject!!.add(
-                            projectName,
-                            deadline,
-                            taskAdd,
-                            workerAdd,
-                            stateAdd
-                        )
-                    }
+
 
             }
             R.id.bt_registeractivity_add -> {
@@ -125,10 +114,38 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 registerState.tag = temp
                 registerState.id = R.id.status_add
 
+                val addNewTaskBtn = Button(this)
+                addNewTaskBtn.text = "confirm"
+                addNewTaskBtn.width = 250
+
+                addNewTaskBtn.setOnClickListener {
+                    val projectName = mEtRegisterActivityProjectname!!.text.toString().trim() { it <= ' ' }
+                    val deadline = mEtRegisterActivityDeadline!!.text.toString().trim() { it <= ' ' }
+                    val taskAdd = registerTask.text.toString().trim() { it <= ' ' }
+                    val workerAdd = registerWorker.text.toString().trim() { it <= ' ' }
+                    val stateAdd = registerState.text.toString().trim() { it <= ' ' }
+                    if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(
+                            taskAdd
+                        ) && !TextUtils.isEmpty(workerAdd) && !TextUtils.isEmpty(stateAdd)
+                    ) {
+                        mDBOpenHelperProject!!.add(
+                            projectName,
+                            deadline,
+                            taskAdd,
+                            workerAdd,
+                            stateAdd
+                        )
+                    }
+                }
+
+
+
+
 
                 myFlowLayout.addView(registerTask)
                 myFlowLayout.addView(registerWorker)
                 myFlowLayout.addView(registerState)
+                myFlowLayout.addView(addNewTaskBtn)
 
                 myFlowLayout.invalidate()
             }
