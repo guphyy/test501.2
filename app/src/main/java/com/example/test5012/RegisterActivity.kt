@@ -12,6 +12,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelper: DBOpenHelper? = null
     private var mEtRegisteractivityUsername: EditText? = null
     private var mEtRegisteractivityPassword2: EditText? = null
+    private var mEtRegisteractivityEmail: EditText? = null
     private var mPositionChoose_worker: RadioButton? = null
     private var mPositionChoose_manager: RadioButton? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +27,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         val mIvRegisteractivityBack = findViewById<ImageView>(R.id.iv_registeractivity_back)
         mEtRegisteractivityUsername = findViewById(R.id.et_registeractivity_username)
         mEtRegisteractivityPassword2 = findViewById(R.id.et_registeractivity_password2)
+        mEtRegisteractivityEmail = findViewById(R.id.et_registeractivity_email)
         mPositionChoose_worker = findViewById(R.id.radioButton_worker)
         mPositionChoose_manager = findViewById(R.id.radioButton_manager)
         mIvRegisteractivityBack.setOnClickListener(this)
@@ -44,10 +46,11 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 //get info
                 val username = mEtRegisteractivityUsername!!.text.toString().trim { it <= ' ' }
                 val password = mEtRegisteractivityPassword2!!.text.toString().trim { it <= ' ' }
-                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+                val email = mEtRegisteractivityEmail!!.text.toString().trim { it <= ' ' }
+                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(email)) {
                     if (mPositionChoose_manager!!.isChecked) {
                         //sent info to database
-                        mDBOpenHelper!!.add(username, password, "manager")
+                        mDBOpenHelper!!.add(username, password, "manager", email)
                         val intent2 = Intent(this, MainActivity::class.java)
                         startActivity(intent2)
                         finish()
@@ -57,7 +60,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else if (mPositionChoose_worker!!.isChecked) {
-                        mDBOpenHelper!!.add(username, password, "worker")
+                        mDBOpenHelper!!.add(username, password, "worker", email)
                         val intent2 = Intent(this, MainActivity::class.java)
                         startActivity(intent2)
                         finish()

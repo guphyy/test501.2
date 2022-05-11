@@ -12,11 +12,11 @@ class DBOpenHelperProject (context: Context?):
                 db.execSQL(
                     "CREATE TABLE IF NOT EXISTS newProject(" +
                             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                            "projectName TEXT," +
-                            "deadline TEXT," +
-                            "task, TEXT," +
-                            "worker, TEXT," +
-                            "state, TEXT)"
+                            "projectName TEXT DEFAULT 'IDEL'," +
+                            "deadline TEXT DEFAULT 'IDEL'," +
+                            "task TEXT DEFAULT 'IDEL'," +
+                            "worker TEXT DEFAULT 'IDEL'," +
+                            "state TEXT DEFAULT 'IDEL')"
 
                 )
             }
@@ -25,11 +25,11 @@ class DBOpenHelperProject (context: Context?):
         db.execSQL(
             ("CREATE TABLE IF NOT EXISTS newProject(" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "projectName TEXT," +
-                    "deadline TEXT," +
-                    "task, TEXT," +
-                    "worker, TEXT," +
-                    "state, TEXT)")
+                    "projectName TEXT DEFAULT 'IDEL'," +
+                    "deadline TEXT DEFAULT 'IDEL'," +
+                    "task TEXT DEFAULT 'IDEL'," +
+                    "worker TEXT DEFAULT 'IDEL'," +
+                    "state TEXT DEFAULT 'IDEL')")
         )
     }
 

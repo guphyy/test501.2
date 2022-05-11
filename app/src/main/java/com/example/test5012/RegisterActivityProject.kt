@@ -96,12 +96,14 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 var myFlowLayout = findViewById<LinearLayout>(R.id.add_here)
                 var registerTask = EditText(this)
                 registerTask.hint = "Please describe next task$temp"
+                registerTask.setText("idle")
                 registerTask.width = 1000
                 registerTask.tag = temp
                 registerTask.id = R.id.task_add
 
                 val registerWorker = EditText(this)
                 registerWorker.hint = "Please select next worker$temp"
+                registerWorker.setText("idle")
                 registerWorker.width = 1000
                 registerWorker.tag = temp
                 registerWorker.id = R.id.worker_add

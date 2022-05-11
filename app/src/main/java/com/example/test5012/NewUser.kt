@@ -1,11 +1,13 @@
 package com.example.test5012
 
-class NewUser(var name: String, var password: String, var position: String) {
+class NewUser(var name: String, var password: String, var identity: String, var email: String) {
 
-    fun newUser(name: String?, password: String?, position: String?) {
+    fun newUser(name: String?, password: String?, indentity: String?, email: String) {
         this.name = name!!
         this.password = password!!
-        this.position = position!!
+        this.identity = identity!!
+        this.email = email!!
+
     }
 
     @JvmName("getName1")
@@ -28,20 +30,31 @@ class NewUser(var name: String, var password: String, var position: String) {
         this.password = password!!
     }
 
-    @JvmName("getPosition1")
-    fun getPosition(): String? {
-        return position
+    @JvmName("getIdentity1")
+    fun getIdentity(): String? {
+        return identity
     }
 
-    @JvmName("setPosition1")
-    fun setPosition(position: String?) {
-        this.position = position!!
+    @JvmName("setIdentity1")
+    fun setIdentity(identity: String?) {
+        this.identity = identity!!
+    }
+
+    @JvmName("getEmail1")
+    fun getEmail(): String? {
+        return email
+    }
+
+    @JvmName("setEmail1")
+    fun setEmail(email: String?) {
+        this.email = email!!
     }
     override fun toString(): String {
         return "newUser{" +
                 "name='" + name + '\'' +
-                ", position='" + position + '\'' +
+                ", identity='" + identity + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 '}'
     }
 }

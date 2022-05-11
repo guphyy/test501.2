@@ -68,7 +68,8 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:hint="Please enter project username" />
+                android:hint="Please enter project username"
+                android:text="idle"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,6 +90,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:hint="Please enter the Deadline"
+                android:text="idle"
                 android:inputType="text" />
 
 

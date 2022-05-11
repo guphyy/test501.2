@@ -13,11 +13,12 @@ class DBOpenHelper(context: Context?) :
         db.execSQL(
             "CREATE TABLE IF NOT EXISTS newUser(" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "name TEXT," +
-                    "password TEXT," +
-                    "position, TEXT," +
-                    "Create_time, DATATIME1," +
-                    "update_time, DATATIME2)"
+                    "name TEXT DEFAULT 'IDEL'," +
+                    "password TEXT DEFAULT 'IDEL'," +
+                    "identity TEXT DEFAULT 'IDEL'," +
+                    "email TEXT DEFAULT 'IDEL'," +
+                    "Create_time DATATIME1," +
+                    "update_time DATATIME2)"
         )
     }
 
@@ -26,11 +27,12 @@ class DBOpenHelper(context: Context?) :
         db.execSQL(
             ("CREATE TABLE IF NOT EXISTS newUser(" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "name TEXT," +
-                    "password TEXT," +
-                    "position, TEXT," +
-                    "Create_time, DATATIME1," +
-                    "update_time, DATATIME2)")
+                    "name TEXT DEFAULT 'IDEL'," +
+                    "password TEXT DEFAULT 'IDEL'," +
+                    "identity TEXT DEFAULT 'IDEL'," +
+                    "email TEXT DEFAULT 'IDEL'," +
+                    "Create_time DATATIME1," +
+                    "update_time DATATIME2)")
         )
     }
 
@@ -39,10 +41,10 @@ class DBOpenHelper(context: Context?) :
         onCreate(db)
     }
 
-    fun add(name: String, password: String, position: String) {
+    fun add(name: String, password: String, identity: String, email: String) {
         db.execSQL(
-            "INSERT INTO newUser (name,password,position) VALUES(?,?,?)",
-            arrayOf<Any>(name, password, position)
+            "INSERT INTO newUser (name,password,identity,email) VALUES(?,?,?,?)",
+            arrayOf<Any>(name, password, identity, email)
         )
         db.close()
     }
@@ -64,7 +66,8 @@ class DBOpenHelper(context: Context?) :
                 val name = cursor.getString(cursor.getColumnIndex("name"))
                 val password = cursor.getString(cursor.getColumnIndex("password"))
                 val identity = cursor.getString(cursor.getColumnIndex("identity"))
-                list.add(NewUser(name, password, identity))
+                val email = cursor.getString(cursor.getColumnIndex("email"))
+                list.add(NewUser(name, password, identity, email))
             }
             cursor.close()
             return list
