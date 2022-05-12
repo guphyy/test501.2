@@ -4,21 +4,35 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val username :String= intent.getStringExtra("user").toString()
+        val pos :String= intent.getStringExtra("position").toString()
         setContentView(R.layout.activity_main)
-
-        initView()
+        initView(username,pos)
     }
-
-    private fun initView() {
-        val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
-        // get the layout and event
+       private fun initView(user: String, pos: String){
+            val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
+            val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
+            //val workerList = findViewById<TextView>(R.id.workerList)
+            //workerList.text = user
+            newProj.isEnabled = false
+            if (pos == "manager"){
+                newProj.isEnabled = true
+            }       // get the layout and event
+           var b = Bundle()
+           b.putString("ProjectName","Name")
+           b.putString("TeamMembers",user)
+           b.putString("Status","On going")
+           b.putString("TaskName","Do your job")
+           val frag = mainVeiwFrag()
+           frag.arguments = b
+           showFragment(frag)
         mBtMainLogout.setOnClickListener(this)
     }
 
@@ -36,9 +50,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent2)
                 finish()
             }
-
-
-
         }
     }
+    fun showFragment(fragment:  mainVeiwFrag){
+        val fram = supportFragmentManager.beginTransaction()
+        fram.replace(R.id.fragmentContainerView,fragment)
+        fram.commit()
+    }
+
 }
