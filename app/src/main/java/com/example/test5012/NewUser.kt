@@ -1,6 +1,8 @@
 package com.example.test5012
 
-class NewUser(var name: String, var password: String, var position: String) {
+import java.io.Serializable
+
+class NewUser(var  name: String, var password: String, var position: String): Serializable {
 
     fun newUser(name: String?, password: String?, position: String?) {
         this.name = name!!

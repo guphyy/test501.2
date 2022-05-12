@@ -74,6 +74,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     if (match) {
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, MainActivity::class.java)
+                        val username :String = data[i].getName()!!
+                        val posistion :String = data[i].getPosition()!!
+                        intent.putExtra("user",username)
+                        intent.putExtra("position",posistion)
                         startActivity(intent)
                         finish() //销毁此Activity
                     } else {

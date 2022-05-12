@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DBOpenHelper(context: Context?) :
     SQLiteOpenHelper(context, "db_test", null, 1) {
-    private val db: SQLiteDatabase
+    private val db: SQLiteDatabase = readableDatabase
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "CREATE TABLE IF NOT EXISTS newUser(" +
@@ -63,14 +63,11 @@ class DBOpenHelper(context: Context?) :
             while (cursor.moveToNext()) {
                 val name = cursor.getString(cursor.getColumnIndex("name"))
                 val password = cursor.getString(cursor.getColumnIndex("password"))
-                val identity = cursor.getString(cursor.getColumnIndex("identity"))
+                val identity = cursor.getString(cursor.getColumnIndex("position"))
                 list.add(NewUser(name, password, identity))
             }
             cursor.close()
             return list
         }
 
-    init {
-        db = readableDatabase
-    }
 }

@@ -17,9 +17,9 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        mDBOpenHelper = DBOpenHelper(this) //MRK
         initView()
-        mDBOpenHelper = DBOpenHelper(this)
-    }
+     }
 
     private fun initView() {
         val mBtRegisteractivityRegister = findViewById<Button>(R.id.bt_registeractivity_register)

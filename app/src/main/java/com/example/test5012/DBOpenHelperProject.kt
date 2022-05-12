@@ -45,7 +45,15 @@ class DBOpenHelperProject (context: Context?):
         )
         db.close()
     }
-
+/*
+ fun add(name: String, password: String, position: String) {
+        db.execSQL(
+            "INSERT INTO newUser (name,password,position) VALUES(?,?,?)",
+            arrayOf<Any>(name, password, position)
+        )
+        db.close()
+    }
+ */
     fun delete(projectName: String, deadline: String, task: String, worker: String, state: String) {
         db.execSQL("DELETE FROM newProject WHERE projectName = AND deadline = AND task = AND task = AND worker = AND state = $projectName$deadline$task$worker$state")
     }
