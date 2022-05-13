@@ -5,13 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
 import kotlin.reflect.typeOf
+import com.google.firebase.firestore.FirebaseFirestore
 
-
+const val TAG = "FIRESTORE"
 class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelperProject: DBOpenHelperProject? = null
     private var mEtRegisterActivityProjectname: EditText? = null
@@ -28,6 +30,9 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_create_project)
         initView()
         mDBOpenHelperProject = DBOpenHelperProject(this)
+    }
+    class FirebaseUtils {
+        val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
 
 
@@ -87,10 +92,25 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
-
-
+                val hashMap = hashMapOf<String, Any>(
+                    "projectName" to projectName,
+                    "deadline" to deadline,
+                    "task" to task,
+                    "worker" to worker,
+                    "state" to state
+                )
+                FirebaseUtils().fireStoreDatabase.collection("projects")
+                    .add(hashMap)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Added document with ID ${it.id}")
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w(TAG, "Error adding document $exception")
+                    }
             }
+
+
+
             R.id.bt_registeractivity_add -> {
                 temp++
                 var myFlowLayout = findViewById<LinearLayout>(R.id.add_here)

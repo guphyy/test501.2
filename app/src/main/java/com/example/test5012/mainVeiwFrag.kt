@@ -46,10 +46,10 @@ class mainVeiwFrag : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_veiw,container,false)
-        val ProjectNameView = view.findViewById<TextView>(R.id.ProjectName)
-        val workerListView = view.findViewById<TextView>(R.id.TeamMembers)
-        val statusView = view.findViewById<TextView>(R.id.status)
-        val TaskView = view.findViewById<TextView>(R.id.TaskName)
+        val ProjectNameView = view.findViewById<TextView>(R.id.ProjectName_mainView)
+        val workerListView = view.findViewById<TextView>(R.id.TeamMembers_mainView)
+        val statusView = view.findViewById<TextView>(R.id.status_mainView)
+        val TaskView = view.findViewById<TextView>(R.id.TaskName_mainView)
         ProjectNameView.text = param1
         workerListView.text = param2
         statusView.text = param3

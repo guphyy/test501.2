@@ -2,8 +2,10 @@ package com.example.test5012
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 class DBOpenHelperProject (context: Context?):
         SQLiteOpenHelper(context, "db_project", null, 1) {
@@ -60,6 +62,44 @@ class DBOpenHelperProject (context: Context?):
 
     fun updata(state: String) {
         db.execSQL("UPDATE newProject SET state = ?", arrayOf<Any>(state))
+    }
+
+    @SuppressLint("Range")
+    fun getProjByName(workerName: String): String? {
+        //db.execSQL("SELECT projectName FROM newProject WHERE worker = workerName")
+        val cursor = db.rawQuery("SELECT projectName FROM newProject WHERE worker = workerName",null)
+        return cursor.getString(0)
+
+
+    }
+    fun getDDLByName(workerName: String) {
+        db.execSQL("SELECT deadline FROM newProject WHERE worker = workerName")
+    }
+    fun getTaskByName(workerName: String) {
+        db.execSQL("SELECT task FROM newProject WHERE worker = workerName")
+    }
+    fun getStateByName(workerName: String) {
+        db.execSQL("SELECT state FROM newProject WHERE worker = workerName")
+
+    }
+    @SuppressLint("Range")
+    fun getinfoByName(workerName: String): ArrayList<NewProject> {
+        val mlist: ArrayList<NewProject> = ArrayList<NewProject>()
+        val cursor = db.rawQuery("SELECT * FROM newProject WHERE worker = workerName", null)
+        if(cursor.count != 0){
+            var mProjName = cursor.getString(cursor.getColumnIndex("projectName"))
+            var mDeadline = cursor.getString(cursor.getColumnIndex("deadline"))
+            var mTask = cursor.getString(cursor.getColumnIndex("task"))
+            var mState = cursor.getString(cursor.getColumnIndex("state"))
+            var mName = cursor.getString(cursor.getColumnIndex("worker"))
+            mlist.add(
+                NewProject(
+                    mProjName, mDeadline, mTask, mState, mName
+                )
+            )
+        }
+        cursor.close()
+        return mlist
     }
 
     val allProjectDate: ArrayList<NewProject>
