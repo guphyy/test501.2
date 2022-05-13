@@ -14,6 +14,9 @@ import kotlin.reflect.typeOf
 import com.google.firebase.firestore.FirebaseFirestore
 
 const val TAG = "FIRESTORE"
+var workerList = arrayListOf<String>()
+var taskList = arrayListOf<String>()
+var stateList = arrayListOf<String>()
 class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelperProject: DBOpenHelperProject? = null
     private var mEtRegisterActivityProjectname: EditText? = null
@@ -66,7 +69,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val intent1 = Intent(this, MainActivity::class.java)
                 startActivity(intent1)
                 finish()
-        }
+            }
             R.id.bt_registeractivity_register -> {
 
                 val projectName = mEtRegisterActivityProjectname!!.text.toString().trim() { it <= ' ' }
@@ -74,6 +77,10 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val task = mEtRegisterActivityTask!!.text.toString().trim() { it <= ' ' }
                 val worker = mEtRegisterActivityWorker!!.text.toString().trim() { it <= ' ' }
                 val state = mEtRegisterActivityState!!.text.toString().trim() { it <= ' ' }
+
+                workerList.add(worker)
+                taskList.add(task)
+                stateList.add(state)
 
                 if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(task) && !TextUtils.isEmpty(worker) && !TextUtils.isEmpty(state)) {
                     mDBOpenHelperProject!!.add(projectName, deadline, task, worker, state)
@@ -95,9 +102,9 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val hashMap = hashMapOf<String, Any>(
                     "projectName" to projectName,
                     "deadline" to deadline,
-                    "task" to task,
-                    "worker" to worker,
-                    "state" to state
+                    "task" to taskList,
+                    "worker" to workerList,
+                    "state" to stateList
                 )
                 FirebaseUtils().fireStoreDatabase.collection("projects")
                     .add(hashMap)
@@ -146,6 +153,9 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     val taskAdd = registerTask.text.toString().trim() { it <= ' ' }
                     val workerAdd = registerWorker.text.toString().trim() { it <= ' ' }
                     val stateAdd = registerState.text.toString().trim() { it <= ' ' }
+                    workerList.add(workerAdd)
+                    taskList.add(taskAdd)
+                    stateList.add(stateAdd)
                     if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(
                             taskAdd
                         ) && !TextUtils.isEmpty(workerAdd) && !TextUtils.isEmpty(stateAdd)
@@ -176,5 +186,3 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
 
     }
 }
-
-
