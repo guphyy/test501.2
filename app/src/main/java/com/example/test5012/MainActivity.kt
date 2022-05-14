@@ -9,6 +9,7 @@ import android.widget.*
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -55,7 +56,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val statelist = projectlistall.get("state") as ArrayList<*>
             val tasklist = projectlistall.get("task") as ArrayList<*>
             for (j in 0..workerlist.size-1) {
-                if (user.contains(workerlist[j].toString())&&(tasklist[j].toString().contains("onGoing"))||manager) {
+                var b1 = workerlist[j].toString().contains(user)
+                var b2 = statelist[j].toString().contains("onGoing")
+                if ((b1&&b2)||manager) {
                     val hlistV = LinearLayout(this)
                     val TaskV = TextView(this)
                     val StatusV = TextView(this)
@@ -63,15 +66,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     TaskV.text = tasklist[j].toString()
                     var test = tasklist[j]
                     StatusV.text = statelist[j].toString()
-                    WorkerV.text = user
+                    WorkerV.text = workerlist[j].toString()
                     val Button = Button(this)
                     Button.id = bt_id;
                     println("button id is : ${Button.id}")
                     Button.setOnClickListener(this)
+                    TaskV.id = 100+bt_id
+                    WorkerV.id = 1000+bt_id
+
                     hlistV.addView(TaskV)
                     hlistV.addView(StatusV)
                     hlistV.addView(WorkerV)
-                    hlistV.addView(Button)
+                    if (!manager ){
+                        hlistV.addView(Button)
+                    }
                     list.addView(hlistV)
                 }
 
@@ -83,16 +91,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val WorkerV = TextView(this)
             TaskV.text = projectlistall["task"].toString()
             StatusV.text =projectlistall["state"].toString()
-            WorkerV.text = user
+            WorkerV.text = projectlistall["worker"].toString()
             val Button = Button(this)
             Button.id = bt_id;
             println("button id is : ${Button.id}")
             Button.setOnClickListener(this)
+
             TaskV.id = 100+bt_id
+            WorkerV.id = 1000+bt_id
             hlistV.addView(TaskV)
             hlistV.addView(StatusV)
             hlistV.addView(WorkerV)
-            hlistV.addView(Button)
+            if (!manager ){
+                hlistV.addView(Button)
+            }
             list.addView(hlistV)
         }
         val cvCard = CardView(this)
@@ -112,15 +124,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 newProj.isEnabled = true
                 manager = true
             }       // get the layout and event
+        val userStorage = TextView(this)
+        userStorage.text = user
 
         var linear = findViewById<LinearLayout>(R.id.fragment_bucket)
+        linear.addView(userStorage)
+
         var bt_id = 0
+        userStorage.id = bt_id+3000
+        userStorage.isVisible = false
            //////////////  ///////////////////////////////////////////////////////////////////////
            var fb = FirebaseUtils().fireStoreDatabase.collection("projects")
            fb.get().addOnSuccessListener { querySnapshot ->
                    querySnapshot.forEach { document ->
                        Log.d(TAG, "Read document with ID ${document.id}")
                        var projectlistall = document.getData() as Map<*,*>
+
+
+                       if (testWorker(projectlistall,user)||manager) {
 
                        val workertester = projectlistall.get("worker").toString()
                        val tasklist = projectlistall.get("task")
@@ -140,6 +161,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                        }
 
                         if (booltest) {
+
                            println(document.data)
                            var currentProj = document.data["projectName"]
                            var currentTask = document.data["task"]
@@ -207,6 +229,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             }
 
 
+
+                            tvProjectName.id = bt_id+2000
+                            linear.addView(cvCard)
+
+
                            cvCard.radius = 15f
                            cvCard.setCardBackgroundColor(Color.parseColor("#009688"))
                            cvCard.setContentPadding(36,36,36,36)
@@ -216,6 +243,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                            linear.addView(cvCard)
                             cvCard.id=bt_id+1000
                             bt_id++
+
 
                         }else{
 
@@ -249,10 +277,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.bt_main_create_new_project -> {
                 val intent2 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
+                var i :Int=3000
+                val pv: TextView = findViewById(i)
                 startActivity(intent2)
-                intent2.putExtra("managername","test")
+                intent2.putExtra("managername",pv.text)
                 finish()
             }
+
+            else ->{
+                var i:Int = view.id
+                println(i)
+                val tv: TextView = findViewById(100+i)
+                val uv: TextView = findViewById(1000+i)
+                val pv: TextView = findViewById(2000+i)
+                println(pv.text)
+                println(tv.text)
+                println(uv.text)
+                //MISSING UPDATE DATABASE
+
 
             0->{
                 println("Button 0")
@@ -262,6 +304,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             2->{
                 println("Button 2")
+
             }
             3->{
                 println("Button 3")
