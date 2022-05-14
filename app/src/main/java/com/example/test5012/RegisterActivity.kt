@@ -51,7 +51,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                     if (mPositionChoose_manager!!.isChecked) {
                         //sent info to database
                         mDBOpenHelper!!.add(username, password, "manager", email)
-                        val intent2 = Intent(this, MainActivity::class.java)
+                        val intent2 = Intent(this, LoginActivity::class.java)
                         startActivity(intent2)
                         finish()
                         Toast.makeText(
@@ -61,7 +61,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                         ).show()
                     } else if (mPositionChoose_worker!!.isChecked) {
                         mDBOpenHelper!!.add(username, password, "worker", email)
-                        val intent2 = Intent(this, MainActivity::class.java)
+                        val intent2 = Intent(this, LoginActivity::class.java)
                         startActivity(intent2)
                         finish()
                         Toast.makeText(
