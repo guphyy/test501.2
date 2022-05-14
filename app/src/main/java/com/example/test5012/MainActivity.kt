@@ -33,13 +33,84 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     class FirebaseUtils {
         val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
+    private fun testWorker(map: Map<*,*>,user: String): Boolean {
+        val tester = map.get("worker").toString()
+        var booltest = false
+        if (tester.contains(",")) {
+            val worker_list = map.get("worker") as ArrayList<*>
+            for (i in 0 until worker_list.size) {
+                if (worker_list.get(i).toString().contains(user)) {
+                    booltest = true
+                    break
+                }
+            }
+        } else {
+            booltest = tester.contains(user)
+        }
+        return booltest
+    }
+    private fun createCard(workertester: String, projectlistall: Map<*,*>, user: String,list:LinearLayout,bt_id: Int, manager:Boolean): CardView {
+        if (workertester.contains(",")){
+            val workerlist = projectlistall.get("worker") as ArrayList<*>
+            val statelist = projectlistall.get("state") as ArrayList<*>
+            val tasklist = projectlistall.get("task") as ArrayList<*>
+            for (j in 0..workerlist.size-1) {
+                if (user.contains(workerlist[j].toString())&&(tasklist[j].toString().contains("onGoing"))||manager) {
+                    val hlistV = LinearLayout(this)
+                    val TaskV = TextView(this)
+                    val StatusV = TextView(this)
+                    val WorkerV = TextView(this)
+                    TaskV.text = tasklist[j].toString()
+                    var test = tasklist[j]
+                    StatusV.text = statelist[j].toString()
+                    WorkerV.text = user
+                    val Button = Button(this)
+                    Button.id = bt_id;
+                    println("button id is : ${Button.id}")
+                    Button.setOnClickListener(this)
+                    hlistV.addView(TaskV)
+                    hlistV.addView(StatusV)
+                    hlistV.addView(WorkerV)
+                    hlistV.addView(Button)
+                    list.addView(hlistV)
+                }
+
+            }
+        }else{
+            val hlistV = LinearLayout(this)
+            val TaskV = TextView(this)
+            val StatusV = TextView(this)
+            val WorkerV = TextView(this)
+            TaskV.text = projectlistall["task"].toString()
+            StatusV.text =projectlistall["state"].toString()
+            WorkerV.text = user
+            val Button = Button(this)
+            Button.id = bt_id;
+            println("button id is : ${Button.id}")
+            Button.setOnClickListener(this)
+            TaskV.id = 100+bt_id
+            hlistV.addView(TaskV)
+            hlistV.addView(StatusV)
+            hlistV.addView(WorkerV)
+            hlistV.addView(Button)
+            list.addView(hlistV)
+        }
+        val cvCard = CardView(this)
+        cvCard.radius = 15f
+        cvCard.setCardBackgroundColor(Color.parseColor("#009688"))
+        cvCard.setContentPadding(36,36,36,36)
+        cvCard.cardElevation = 30f
+
+
 
     private fun initView(user: String, pos: String){
             val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
             val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
             newProj.isEnabled = false
+            var manager = false
             if (pos == "manager"){
                 newProj.isEnabled = true
+                manager = true
             }       // get the layout and event
 
         var linear = findViewById<LinearLayout>(R.id.fragment_bucket)
@@ -50,6 +121,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                    querySnapshot.forEach { document ->
                        Log.d(TAG, "Read document with ID ${document.id}")
                        var projectlistall = document.getData() as Map<*,*>
+
                        val workertester = projectlistall.get("worker").toString()
                        val tasklist = projectlistall.get("task")
                        val statelist = projectlistall.get("state")
@@ -147,6 +219,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                         }else{
 
+
                            println(document.data["workers"])
                        }
                    }
@@ -177,8 +250,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val intent2 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
                 startActivity(intent2)
+                intent2.putExtra("managername","test")
                 finish()
             }
+
             0->{
                 println("Button 0")
             }
@@ -193,6 +268,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
         }
+
     }
 
 }
