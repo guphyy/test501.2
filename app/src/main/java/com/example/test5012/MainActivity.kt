@@ -55,7 +55,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val statelist = projectlistall.get("state") as ArrayList<*>
             val tasklist = projectlistall.get("task") as ArrayList<*>
             for (j in 0..workerlist.size-1) {
-                if (user.contains(workerlist[j].toString())&&(tasklist[j].toString().contains("onGoing"))||manager) {
+                var b1 = workerlist[j].toString().contains(user)
+                var b2 = statelist[j].toString().contains("onGoing")
+                if ((b1&&b2)||manager) {
                     val hlistV = LinearLayout(this)
                     val TaskV = TextView(this)
                     val StatusV = TextView(this)
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     TaskV.text = tasklist[j].toString()
                     var test = tasklist[j]
                     StatusV.text = statelist[j].toString()
-                    WorkerV.text = user
+                    WorkerV.text = workerlist[j].toString()
                     val Button = Button(this)
                     Button.id = bt_id;
                     println("button id is : ${Button.id}")
@@ -83,7 +85,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val WorkerV = TextView(this)
             TaskV.text = projectlistall["task"].toString()
             StatusV.text =projectlistall["state"].toString()
-            WorkerV.text = user
+            WorkerV.text = projectlistall["worker"].toString()
             val Button = Button(this)
             Button.id = bt_id;
             println("button id is : ${Button.id}")
@@ -126,7 +128,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                        val name = projectlistall["projectName"].toString()
                        val projdeadline = projectlistall["deadline"].toString()
 
-                       if (testWorker(projectlistall,user)) {
+                       if (testWorker(projectlistall,user)||manager) {
                            println(document.data)
                            val tvProjectName = TextView(this)
                            tvProjectName.text =  name
