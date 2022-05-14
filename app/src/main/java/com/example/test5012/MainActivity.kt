@@ -49,18 +49,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         return booltest
     }
-    private fun createCard(workertester: String, projectlistall: Map<*,*>, user: String,list:LinearLayout,bt_id: Int): CardView {
+    private fun createCard(workertester: String, projectlistall: Map<*,*>, user: String,list:LinearLayout,bt_id: Int, manager:Boolean): CardView {
         if (workertester.contains(",")){
             val workerlist = projectlistall.get("worker") as ArrayList<*>
             val statelist = projectlistall.get("state") as ArrayList<*>
             val tasklist = projectlistall.get("task") as ArrayList<*>
             for (j in 0..workerlist.size-1) {
-                if (user.contains(workerlist[j].toString())&&tasklist[j].toString().contains("onGoing")) {
+                if (user.contains(workerlist[j].toString())&&(tasklist[j].toString().contains("onGoing"))||manager) {
                     val hlistV = LinearLayout(this)
                     val TaskV = TextView(this)
                     val StatusV = TextView(this)
                     val WorkerV = TextView(this)
                     TaskV.text = tasklist[j].toString()
+                    var test = tasklist[j]
                     StatusV.text = statelist[j].toString()
                     WorkerV.text = user
                     val Button = Button(this)
@@ -107,8 +108,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
             val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
             newProj.isEnabled = false
+            var manager = false
             if (pos == "manager"){
                 newProj.isEnabled = true
+                manager = true
             }       // get the layout and event
 
         var linear = findViewById<LinearLayout>(R.id.fragment_bucket)
@@ -180,6 +183,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val intent2 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
                 startActivity(intent2)
+                intent2.putExtra("managername",manager)
                 finish()
             }
             else ->{
@@ -188,6 +192,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val tv: TextView = findViewById(100+i)
                 val cv: CardView = findViewById(1000+i)
                 println(tv.text)
+                //MISSING UPDATE DATABASE
             }
 
        }
