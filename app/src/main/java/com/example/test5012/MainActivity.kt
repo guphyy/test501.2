@@ -9,6 +9,7 @@ import android.widget.*
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -70,10 +71,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     Button.id = bt_id;
                     println("button id is : ${Button.id}")
                     Button.setOnClickListener(this)
+                    TaskV.id = 100+bt_id
+                    WorkerV.id = 1000+bt_id
+
                     hlistV.addView(TaskV)
                     hlistV.addView(StatusV)
                     hlistV.addView(WorkerV)
-                    hlistV.addView(Button)
+                    if (!manager ){
+                        hlistV.addView(Button)
+                    }
                     list.addView(hlistV)
                 }
 
@@ -90,11 +96,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             Button.id = bt_id;
             println("button id is : ${Button.id}")
             Button.setOnClickListener(this)
+
             TaskV.id = 100+bt_id
+            WorkerV.id = 1000+bt_id
             hlistV.addView(TaskV)
             hlistV.addView(StatusV)
             hlistV.addView(WorkerV)
-            hlistV.addView(Button)
+            if (!manager ){
+                hlistV.addView(Button)
+            }
             list.addView(hlistV)
         }
         val cvCard = CardView(this)
@@ -115,9 +125,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 newProj.isEnabled = true
                 manager = true
             }       // get the layout and event
+        val userStorage = TextView(this)
+        userStorage.text = user
 
         var linear = findViewById<LinearLayout>(R.id.fragment_bucket)
+        linear.addView(userStorage)
+
         var bt_id = 0
+        userStorage.id = bt_id+3000
+        userStorage.isVisible = false
            //////////////  ///////////////////////////////////////////////////////////////////////
            var fb = FirebaseUtils().fireStoreDatabase.collection("projects")
            fb.get().addOnSuccessListener { querySnapshot ->
@@ -145,10 +161,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                            list.addView(tvMang)
                            var cvCard = createCard(workertester,projectlistall,user,list,bt_id,manager)
 
+                            tvProjectName.id = bt_id+2000
+                            linear.addView(cvCard)
 
-                           linear.addView(cvCard)
-                            cvCard.id=bt_id+1000
-                            bt_id++
 
                         }else{
 
@@ -181,16 +196,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.bt_main_create_new_project -> {
                 val intent2 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
+                var i :Int=3000
+                val pv: TextView = findViewById(i)
                 startActivity(intent2)
-                intent2.putExtra("managername","test")
+                intent2.putExtra("managername",pv.text)
                 finish()
             }
             else ->{
                 var i:Int = view.id
                 println(i)
                 val tv: TextView = findViewById(100+i)
-                val cv: CardView = findViewById(1000+i)
+                val uv: TextView = findViewById(1000+i)
+                val pv: TextView = findViewById(2000+i)
+                println(pv.text)
                 println(tv.text)
+                println(uv.text)
                 //MISSING UPDATE DATABASE
             }
 
