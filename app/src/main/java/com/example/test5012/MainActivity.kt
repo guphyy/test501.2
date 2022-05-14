@@ -113,9 +113,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cvCard.setContentPadding(36,36,36,36)
         cvCard.cardElevation = 30f
 
-        cvCard.addView(list)
-        return cvCard
-    }
+
+
     private fun initView(user: String, pos: String){
             val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
             val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
@@ -140,32 +139,114 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                    querySnapshot.forEach { document ->
                        Log.d(TAG, "Read document with ID ${document.id}")
                        var projectlistall = document.getData() as Map<*,*>
-                       val workertester = projectlistall["worker"].toString() //Checks if there is an array or string, crashes without
-                       val name = projectlistall["projectName"].toString()
-                       val projdeadline = projectlistall["deadline"].toString()
+
 
                        if (testWorker(projectlistall,user)||manager) {
-                           println(document.data)
-                           val tvProjectName = TextView(this)
-                           tvProjectName.text =  name
-                           val tvDeadline = TextView(this)
-                           tvDeadline.text =  projdeadline
-                           //NEED CODE FOR NUMBER OF WORKERS IN AN ARRAY
-                           val tvMang = TextView(this)
-                           tvMang.text =  user //REPLACE WITH MANAGER
 
+                       val workertester = projectlistall.get("worker").toString()
+                       val tasklist = projectlistall.get("task")
+                       val statelist = projectlistall.get("state")
+                       val workerlist = projectlistall.get("worker")
+                       var booltest = false
+                       if (workertester.contains(",")){
+                           val workerlist = projectlistall.get("worker") as ArrayList<*>
+                           for (i in 0..workerlist.size-1){
+                               if (workerlist.get(i).toString().contains(user)) {
+                                   booltest = true
+                                   break
+                               }
+                           }
+                       }else{
+                           booltest=workertester.contains(user)
+                       }
+
+                        if (booltest) {
+
+                           println(document.data)
+                           var currentProj = document.data["projectName"]
+                           var currentTask = document.data["task"]
+                           var currentDDL = document.data["deadline"]
+                           var currentState = document.data["state"]
+                           var currentWorker = document.data["worker"]
+                           println(currentProj)
+                           val tvProjectName = TextView(this)
+                           tvProjectName.text =  currentProj.toString()
+                           val tvDeadline = TextView(this)
+                           tvDeadline.text =  currentDDL.toString()
+                           //NEED CODE FOR NUMBER OF WORKERS IN AN ARRAY
+                           val tvWorkers = TextView(this)
+                           tvWorkers.text =  currentWorker.toString()
+                           val tvTasks = TextView(this)
+                           tvTasks.text =  currentTask.toString()
+                           val cvCard = CardView(this)
                            val list = LinearLayout(this)
                            list.orientation = VERTICAL
                            list.addView(tvProjectName)
                            list.addView(tvDeadline)
-                           list.addView(tvMang)
-                           var cvCard = createCard(workertester,projectlistall,user,list,bt_id,manager)
+                            if (workertester.contains(",")){
+                              val workerlist = projectlistall.get("worker") as ArrayList<*>
+                              val statelist = projectlistall.get("state") as ArrayList<*>
+                              val tasklist = projectlistall.get("task") as ArrayList<*>
+                                for (j in 0..workerlist.size-1) {
+                                    if (user.contains(workerlist[j].toString())&&tasklist[j].toString().contains("onGoing")) {
+                                        val hlistV = LinearLayout(this)
+                                        val TaskV = TextView(this)
+                                        val StatusV = TextView(this)
+                                        val WorkerV = TextView(this)
+                                        TaskV.text = tasklist[j].toString()
+                                        StatusV.text = statelist[j].toString()
+                                        WorkerV.text = user
+                                        val Button = Button(this)
+                                        Button.id = bt_id;
+                                        println("button id is : ${Button.id}")
+                                        Button.setOnClickListener(this)
+                                        hlistV.addView(TaskV)
+                                        hlistV.addView(StatusV)
+                                        hlistV.addView(WorkerV)
+                                        hlistV.addView(Button)
+                                        list.addView(hlistV)
+                                    }
+
+                                }
+                           }else{
+                                val hlistV = LinearLayout(this)
+                                val TaskV = TextView(this)
+                                val StatusV = TextView(this)
+                                val WorkerV = TextView(this)
+                                TaskV.text = tasklist.toString()
+                                StatusV.text = statelist.toString()
+                                WorkerV.text = user
+                                val Button = Button(this)
+                                Button.id = bt_id;
+                                println("button id is : ${Button.id}")
+                                Button.setOnClickListener(this)
+                                TaskV.id = 100+bt_id
+                                hlistV.addView(TaskV)
+                                hlistV.addView(StatusV)
+                                hlistV.addView(WorkerV)
+                                hlistV.addView(Button)
+                                list.addView(hlistV)
+                            }
+
+
 
                             tvProjectName.id = bt_id+2000
                             linear.addView(cvCard)
 
 
+                           cvCard.radius = 15f
+                           cvCard.setCardBackgroundColor(Color.parseColor("#009688"))
+                           cvCard.setContentPadding(36,36,36,36)
+                           cvCard.cardElevation = 30f
+
+                           cvCard.addView(list)
+                           linear.addView(cvCard)
+                            cvCard.id=bt_id+1000
+                            bt_id++
+
+
                         }else{
+
 
                            println(document.data["workers"])
                        }
@@ -202,6 +283,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 intent2.putExtra("managername",pv.text)
                 finish()
             }
+
             else ->{
                 var i:Int = view.id
                 println(i)
@@ -212,9 +294,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 println(tv.text)
                 println(uv.text)
                 //MISSING UPDATE DATABASE
+
+
+            0->{
+                println("Button 0")
+            }
+            1->{
+                println("Button 1")
+            }
+            2->{
+                println("Button 2")
+
+            }
+            3->{
+                println("Button 3")
             }
 
-       }
+        }
+
     }
 
 }
