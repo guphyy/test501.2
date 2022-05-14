@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val intent2 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
                 startActivity(intent2)
-                intent2.putExtra("managername",manager)
+                intent2.putExtra("managername","test")
                 finish()
             }
             else ->{
