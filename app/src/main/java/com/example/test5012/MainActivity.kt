@@ -123,9 +123,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                        Log.d(TAG, "Read document with ID ${document.id}")
                        var projectlistall = document.getData() as Map<*,*>
                        val workertester = projectlistall["worker"].toString() //Checks if there is an array or string, crashes without
-                       val tasklist = projectlistall["task"]
-                       val statelist = projectlistall["state"]
-                       val workerlist = projectlistall["worker"]
                        val name = projectlistall["projectName"].toString()
                        val projdeadline = projectlistall["deadline"].toString()
 
@@ -144,7 +141,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                            list.addView(tvProjectName)
                            list.addView(tvDeadline)
                            list.addView(tvMang)
-                           var cvCard = createCard(workertester,projectlistall,user,list,bt_id)
+                           var cvCard = createCard(workertester,projectlistall,user,list,bt_id,manager)
 
 
                            linear.addView(cvCard)
