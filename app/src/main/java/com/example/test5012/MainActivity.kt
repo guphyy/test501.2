@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 var username :String= intent.getStringExtra("user").toString()
 
                 val pos_back :String= intent.getStringExtra("pos_back").toString()
-                val name_back: String= intent.getStringExtra("pos_back").toString()
+                val name_back: String= intent.getStringExtra("name_back").toString()
                 if(username == null && pos == null){
                     username = name_back
                     pos = pos_back

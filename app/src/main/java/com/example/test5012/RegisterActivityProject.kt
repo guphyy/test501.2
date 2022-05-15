@@ -101,9 +101,9 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     //intent2.putExtra("user",)
                     val pos :String= intent.getStringExtra("managerPos").toString()
                     var name:String = intent.getStringExtra("managername").toString()
-                    startActivity(Intent(this, MainActivity::class.java).putExtra("username_back",name).putExtra("pos_back",pos))
+                    //startActivity(Intent(this, MainActivity::class.java).putExtra("username_back",name).putExtra("pos_back",pos))
 
-                    finish()
+                    //finish()
                     Toast.makeText(
                         this,
                         "Complete information and successful registration",
