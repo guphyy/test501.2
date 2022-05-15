@@ -25,22 +25,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelperProject: DBOpenHelperProject? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val username :String= intent.getStringExtra("user").toString()
-        val pos :String= intent.getStringExtra("position").toString()
+        var username :String= intent.getStringExtra("user").toString()
+        var pos :String= intent.getStringExtra("position").toString()
         val pos_back :String= intent.getStringExtra("pos_back").toString()
+        val name_back: String= intent.getStringExtra("username_back").toString()
+        if(username == null && pos == null){
+            username = name_back
+            pos = pos_back
+        }
         setContentView(R.layout.activity_main)
-        initView(username,pos,pos_back)
+        initView(username,pos)
         mDBOpenHelperProject = DBOpenHelperProject(this)
     }
 
-    //override fun onRestart() {
-    //    super.onRestart()
-    //   setContentView(R.layout.activity_main)
-    //   val username :String= intent.getStringExtra("user").toString()
-    //   val pos :String= intent.getStringExtra("position").toString()
-    //  initView(username,pos)
-    //   mDBOpenHelperProject = DBOpenHelperProject(this)
-    // }
+
     class FirebaseUtils {
         val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
@@ -126,12 +124,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cvCard.addView(list)
         return cvCard
     }
-    private fun initView(user: String, pos: String, pos_back: String){
+    private fun initView(user: String, pos: String){
         val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
         val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
         newProj.isEnabled = false
         var manager = false
-        if (pos == "manager" || pos_back == "manager"){
+        if (pos == "manager"){
             newProj.isEnabled = true
             manager = true
         }       // get the layout and event
@@ -208,12 +206,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 // when touch the btn, go to create new project page
                 var i :Int=3000
                 val pv: TextView = findViewById(i)
-                var sentMasage = pv.text
-                val pos :String= intent.getStringExtra("position").toString()
-
-                startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managername", sentMasage).putExtra("managerPos", pos))
 
 
+                var pos :String= intent.getStringExtra("position").toString()
+                var username :String= intent.getStringExtra("user").toString()
+
+                val pos_back :String= intent.getStringExtra("pos_back").toString()
+                val name_back: String= intent.getStringExtra("pos_back").toString()
+                if(username == null && pos == null){
+                    username = name_back
+                    pos = pos_back
+                }
+
+                startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managername", username).putExtra("managerPos", pos))
+
+               // startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managerpos", pos).putExtra("managerPos", pos))
 
                 //here to sent out the userName
                 finish()

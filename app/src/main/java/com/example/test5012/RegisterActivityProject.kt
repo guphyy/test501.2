@@ -94,7 +94,9 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     //val intent5 = Intent(this, MainActivity::class.java)
                     //intent2.putExtra("user",)
                     val pos :String= intent.getStringExtra("managerPos").toString()
-                    startActivity(Intent(this, MainActivity::class.java).putExtra("pos_back",pos))
+                    var name:String = intent.getStringExtra("managername").toString()
+                    startActivity(Intent(this, MainActivity::class.java).putExtra("username_back",name).putExtra("pos_back",pos))
+
                     finish()
                     Toast.makeText(
                         this,

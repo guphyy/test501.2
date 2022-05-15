@@ -57,7 +57,7 @@
                 <TextView
                     android:id="@+id/tv_registeractivity_projectname"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:text="Project name"/>
 
             </LinearLayout>
@@ -65,7 +65,7 @@
             <EditText
                 android:id="@+id/et_registeractivity_projectname"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:hint="Please enter project username"
@@ -86,7 +86,7 @@
             <EditText
                 android:id="@+id/et_registeractivity_deadline"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:hint="Please enter the Deadline"
@@ -108,7 +108,7 @@
                 android:id="@+id/rl_registeractivity_part2"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:layout_marginTop="250dp">
+                android:layout_marginTop="200dp">
 
                 <!-- 第二个部分，动态生成列表 -->
 
@@ -162,15 +162,26 @@
                         android:hint="the State"
                         android:inputType="text"
                         android:text="onGoing" />
+                    <Button
+                        android:id="@+id/bt_registeractivity_add"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/selector_loginactivity_button"
+                        android:onClick="onClick"
+                        android:text="ADD"
+                        android:textColor="#fff" />
+
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="250dp">
 
                         <LinearLayout
                             android:id="@+id/add_here"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="55dp"
                             android:orientation="vertical"
                             app:layout_constraintTop_toTopOf="parent">
@@ -180,16 +191,6 @@
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/bt_registeractivity_add"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="150dp"
-                    android:background="@drawable/selector_loginactivity_button"
-                    android:onClick="onClick"
-                    android:text="ADD"
-                    android:textColor="#fff" />
 
 
             </RelativeLayout>
@@ -198,8 +199,8 @@
                 android:id="@+id/bt_registeractivity_register"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/selector_loginactivity_button"
                 android:onClick="onClick"
                 android:text="Sign up"
