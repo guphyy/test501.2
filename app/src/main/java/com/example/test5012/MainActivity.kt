@@ -27,10 +27,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         val username :String= intent.getStringExtra("user").toString()
         val pos :String= intent.getStringExtra("position").toString()
+        val pos_back :String= intent.getStringExtra("pos_back").toString()
         setContentView(R.layout.activity_main)
-        initView(username,pos)
+        initView(username,pos,pos_back)
         mDBOpenHelperProject = DBOpenHelperProject(this)
     }
+
+    //override fun onRestart() {
+    //    super.onRestart()
+    //   setContentView(R.layout.activity_main)
+    //   val username :String= intent.getStringExtra("user").toString()
+    //   val pos :String= intent.getStringExtra("position").toString()
+    //  initView(username,pos)
+    //   mDBOpenHelperProject = DBOpenHelperProject(this)
+    // }
     class FirebaseUtils {
         val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
@@ -116,12 +126,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cvCard.addView(list)
         return cvCard
     }
-    private fun initView(user: String, pos: String){
+    private fun initView(user: String, pos: String, pos_back: String){
         val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
         val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
         newProj.isEnabled = false
         var manager = false
-        if (pos == "manager"){
+        if (pos == "manager" || pos_back == "manager"){
             newProj.isEnabled = true
             manager = true
         }       // get the layout and event
@@ -199,9 +209,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 var i :Int=3000
                 val pv: TextView = findViewById(i)
                 var sentMasage = pv.text
+                val pos :String= intent.getStringExtra("position").toString()
 
-
-                startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managername", sentMasage))
+                startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managername", sentMasage).putExtra("managerPos", pos))
 
 
 

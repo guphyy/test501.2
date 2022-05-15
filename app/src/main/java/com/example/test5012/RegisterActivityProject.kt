@@ -93,7 +93,8 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     mDBOpenHelperProject!!.add(projectName, deadline, task, worker, state)
                     //val intent5 = Intent(this, MainActivity::class.java)
                     //intent2.putExtra("user",)
-                    startActivity(Intent(this, MainActivity::class.java).putExtra("user",managerName))
+                    val pos :String= intent.getStringExtra("managerPos").toString()
+                    startActivity(Intent(this, MainActivity::class.java).putExtra("pos_back",pos))
                     finish()
                     Toast.makeText(
                         this,
@@ -120,7 +121,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     .document("project: $projectName")
                     .set(hashMap)
                     .addOnSuccessListener {
-                        Log.d(TAG, "Added document with ID $it")
+                        Log.d(TAG, "Added document with ID $projectName")
                     }
                     .addOnFailureListener { exception ->
                         Log.w(TAG, "Error adding document $exception")
