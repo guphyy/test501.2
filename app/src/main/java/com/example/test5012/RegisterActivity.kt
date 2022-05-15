@@ -20,7 +20,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_register)
         mDBOpenHelper = DBOpenHelper(this) //MRK
         initView()
-     }
+    }
 
     private fun initView() {
         val mBtRegisteractivityRegister = findViewById<Button>(R.id.bt_registeractivity_register)

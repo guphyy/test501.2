@@ -17,6 +17,8 @@ const val TAG = "FIRESTORE"
 var workerList = arrayListOf<String>()
 var taskList = arrayListOf<String>()
 var stateList = arrayListOf<String>()
+
+
 class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelperProject: DBOpenHelperProject? = null
     private var mEtRegisterActivityProjectname: EditText? = null
@@ -28,11 +30,15 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
     private var mEtRegisterActivityTaskAdd: EditText? = null
     private var mEtRegisterActivityWorkerAdd: EditText? = null
     private var mEtRegisterActivityStateAdd: EditText? = null
+    private var managername_m: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_project)
-        initView()
+
         mDBOpenHelperProject = DBOpenHelperProject(this)
+
+
+        initView()
     }
     class FirebaseUtils {
         val fireStoreDatabase = FirebaseFirestore.getInstance()
@@ -66,8 +72,8 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id){
             R.id.iv_registeractivity_back -> {
-                val intent1 = Intent(this, MainActivity::class.java)
-                startActivity(intent1)
+                val intent4 = Intent(this, MainActivity::class.java)
+                startActivity(intent4)
                 finish()
             }
             R.id.bt_registeractivity_register -> {
@@ -77,15 +83,17 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val task = mEtRegisterActivityTask!!.text.toString().trim() { it <= ' ' }
                 val worker = mEtRegisterActivityWorker!!.text.toString().trim() { it <= ' ' }
                 val state = mEtRegisterActivityState!!.text.toString().trim() { it <= ' ' }
-
+                val managerName = intent.getStringExtra("managername").toString()
+                val projectState = "onGoing"
                 workerList.add(worker)
                 taskList.add(task)
                 stateList.add(state)
 
                 if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(task) && !TextUtils.isEmpty(worker) && !TextUtils.isEmpty(state)) {
                     mDBOpenHelperProject!!.add(projectName, deadline, task, worker, state)
-                    val intent2 = Intent(this, MainActivity::class.java)
-                    startActivity(intent2)
+                    //val intent5 = Intent(this, MainActivity::class.java)
+                    //intent2.putExtra("user",)
+                    startActivity(Intent(this, MainActivity::class.java).putExtra("user",managerName))
                     finish()
                     Toast.makeText(
                         this,
@@ -102,14 +110,17 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val hashMap = hashMapOf<String, Any>(
                     "projectName" to projectName,
                     "deadline" to deadline,
+                    "project_state" to projectState,
                     "task" to taskList,
                     "worker" to workerList,
-                    "state" to stateList
+                    "state" to stateList,
+                    "submit_by" to managerName
                 )
                 FirebaseUtils().fireStoreDatabase.collection("projects")
-                    .add(hashMap)
+                    .document("project: $projectName")
+                    .set(hashMap)
                     .addOnSuccessListener {
-                        Log.d(TAG, "Added document with ID ${it.id}")
+                        Log.d(TAG, "Added document with ID $it")
                     }
                     .addOnFailureListener { exception ->
                         Log.w(TAG, "Error adding document $exception")
