@@ -73,6 +73,11 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
         when (view.id){
             R.id.iv_registeractivity_back -> {
                 val intent4 = Intent(this, MainActivity::class.java)
+
+                val managerName = intent.getStringExtra("managername").toString()
+                println("Going back from activity $managerName")
+                intent4.putExtra("user",managerName)
+                intent4.putExtra("position","manager")
                 startActivity(intent4)
                 finish()
             }
@@ -84,6 +89,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val worker = mEtRegisterActivityWorker!!.text.toString().trim() { it <= ' ' }
                 val state = mEtRegisterActivityState!!.text.toString().trim() { it <= ' ' }
                 val managerName = intent.getStringExtra("managername").toString()
+                println(managerName)
                 val projectState = "onGoing"
                 workerList.add(worker)
                 taskList.add(task)

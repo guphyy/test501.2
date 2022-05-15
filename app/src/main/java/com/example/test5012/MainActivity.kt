@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             username = name_back
             pos = pos_back
         }
+        println("user $username , $pos")
         setContentView(R.layout.activity_main)
         initView(username,pos)
         mDBOpenHelperProject = DBOpenHelperProject(this)
