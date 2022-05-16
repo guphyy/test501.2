@@ -14,13 +14,13 @@
         <RelativeLayout
             android:id="@+id/rl_registeractivity_top"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="40dp"
             android:background="@color/color_minefragment_top">
 
             <ImageView
                 android:id="@+id/iv_registeractivity_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/ic_left_back"
@@ -153,6 +153,16 @@
                         android:inputType="text" />
 
                     <EditText
+                        android:id="@+id/et_registeractivity_taskDdl"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_vertical"
+                        android:hint="Please enter deadline of task"
+                        android:inputType="text" />
+
+                    <EditText
                         android:id="@+id/et_registeractivity_state"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
@@ -182,7 +192,7 @@
                             android:id="@+id/add_here"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="55dp"
+                            android:layout_marginTop="0dp"
                             android:orientation="vertical"
                             app:layout_constraintTop_toTopOf="parent">
 
