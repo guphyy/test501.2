@@ -13,6 +13,7 @@ import android.widget.*
 import android.R
 
 import com.example.test5012.databinding.ActivityLoginBinding
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.ArrayList
 
 
@@ -34,6 +35,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         initView()
         mDBOpenHelper = DBOpenHelper(this)
 
+    }
+    class FirebaseUtils {
+        val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
     private fun initView() {
         mBtLoginactivityLogin = myLoginActivity.btLoginactivityLogin

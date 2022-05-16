@@ -27,13 +27,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         var username :String= intent.getStringExtra("user").toString()
         var pos :String= intent.getStringExtra("position").toString()
-        val pos_back :String= intent.getStringExtra("pos_back").toString()
-        val name_back: String= intent.getStringExtra("username_back").toString()
-        if(username == null && pos == null){
-            username = name_back
-            pos = pos_back
-        }
         println("user $username , $pos")
+
         setContentView(R.layout.activity_main)
         initView(username,pos)
         mDBOpenHelperProject = DBOpenHelperProject(this)
@@ -59,7 +54,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         return booltest
     }
-    private fun createCard(workertester: String, projectlistall: Map<*,*>, user: String,list:LinearLayout,bt_id: Int, manager:Boolean): CardView {
+    private fun createCard(workertester: String, projectlistall: Map<*,*>, user: String,list:LinearLayout,bt_id: Int, manager:Boolean, projName: String):Pair<CardView, Int> {
+        var bt_id_runner = bt_id
         if (workertester.contains(",")){
             val workerlist = projectlistall.get("worker") as ArrayList<*>
             val statelist = projectlistall.get("state") as ArrayList<*>
@@ -72,20 +68,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val TaskV = TextView(this)
                     val StatusV = TextView(this)
                     val WorkerV = TextView(this)
+                    val ProjNameV = TextView(this)
+
                     TaskV.text = tasklist[j].toString()
-                    var test = tasklist[j]
                     StatusV.text = statelist[j].toString()
                     WorkerV.text = workerlist[j].toString()
+                    ProjNameV.text = projName
+                    ProjNameV.isVisible = false
                     val Button = Button(this)
-                    Button.id = bt_id;
+                    Button.id = bt_id_runner;
                     println("button id is : ${Button.id}")
                     Button.setOnClickListener(this)
-                    TaskV.id = 100+bt_id
-                    WorkerV.id = 1000+bt_id
-
+                    TaskV.id = 100+bt_id_runner
+                    WorkerV.id = 1000+bt_id_runner
+                    ProjNameV.id = 2000+bt_id_runner
+                    bt_id_runner =bt_id_runner+ 1
                     hlistV.addView(TaskV)
                     hlistV.addView(StatusV)
                     hlistV.addView(WorkerV)
+                    hlistV.addView(ProjNameV)
                     if (!manager ){
                         hlistV.addView(Button)
                     }
@@ -93,28 +94,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             }
-        }else{
-            val hlistV = LinearLayout(this)
-            val TaskV = TextView(this)
-            val StatusV = TextView(this)
-            val WorkerV = TextView(this)
-            TaskV.text = projectlistall["task"].toString()
-            StatusV.text =projectlistall["state"].toString()
-            WorkerV.text = projectlistall["worker"].toString()
-            val Button = Button(this)
-            Button.id = bt_id;
-            println("button id is : ${Button.id}")
-            Button.setOnClickListener(this)
-
-            TaskV.id = 100+bt_id
-            WorkerV.id = 1000+bt_id
-            hlistV.addView(TaskV)
-            hlistV.addView(StatusV)
-            hlistV.addView(WorkerV)
-            if (!manager ){
-                hlistV.addView(Button)
+        }else {
+            if (projectlistall["state"].toString().contains("onGoing")) {
+                val hlistV = LinearLayout(this)
+                val TaskV = TextView(this)
+                val StatusV = TextView(this)
+                val WorkerV = TextView(this)
+                TaskV.text = (projectlistall["task"].toString()).drop(1).dropLast(1)
+                StatusV.text = (projectlistall["state"].toString()).drop(1).dropLast(1)
+                WorkerV.text = (projectlistall["worker"].toString()).drop(1).dropLast(1)
+                val Button = Button(this)
+                Button.id = bt_id_runner;
+                println("button id is : ${Button.id}")
+                Button.setOnClickListener(this)
+                val ProjNameV = TextView(this)
+                ProjNameV.text = projName
+                ProjNameV.isVisible = false
+                TaskV.id = 100 + bt_id_runner
+                WorkerV.id = 1000 + bt_id_runner
+                ProjNameV.id = bt_id_runner+2000
+                hlistV.addView(TaskV)
+                hlistV.addView(StatusV)
+                hlistV.addView(WorkerV)
+                if (!manager) {
+                    hlistV.addView(Button)
+                }
+                list.addView(hlistV)
             }
-            list.addView(hlistV)
         }
         val cvCard = CardView(this)
         cvCard.radius = 15f
@@ -123,8 +129,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cvCard.cardElevation = 30f
 
         cvCard.addView(list)
-        return cvCard
+        return Pair(cvCard , bt_id_runner)
     }
+
     private fun initView(user: String, pos: String){
         val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
         val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
@@ -134,15 +141,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             newProj.isEnabled = true
             manager = true
         }       // get the layout and event
-        val userStorage = TextView(this)
-        userStorage.text = user
 
         var linear = findViewById<LinearLayout>(R.id.fragment_bucket)
-        linear.addView(userStorage)
 
         var bt_id = 0
-        userStorage.id = bt_id+3000
-        userStorage.isVisible = false
+
         //////////////  ///////////////////////////////////////////////////////////////////////
         var fb = FirebaseUtils().fireStoreDatabase.collection("projects")
         fb.get().addOnSuccessListener { querySnapshot ->
@@ -168,9 +171,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     list.addView(tvProjectName)
                     list.addView(tvDeadline)
                     list.addView(tvMang)
-                    var cvCard = createCard(workertester,projectlistall,user,list,bt_id,manager)
+                    var (cvCard,bt_id) = createCard(workertester,projectlistall,user,list,bt_id,manager, name)
 
-                    tvProjectName.id = bt_id+2000
+
                     linear.addView(cvCard)
 
 
@@ -205,20 +208,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.bt_main_create_new_project -> {
                 //val intent3 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
-                var i :Int=3000
-                val pv: TextView = findViewById(i)
-
-
                 var pos :String= intent.getStringExtra("position").toString()
                 var username :String= intent.getStringExtra("user").toString()
-
-                val pos_back :String= intent.getStringExtra("pos_back").toString()
-                val name_back: String= intent.getStringExtra("name_back").toString()
-                if(username == null && pos == null){
-                    username = name_back
-                    pos = pos_back
-                }
-
                 startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managername", username).putExtra("managerPos", pos))
 
                // startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managerpos", pos).putExtra("managerPos", pos))
@@ -248,6 +239,44 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 println(pv.text)
                 println(tv.text)
                 println(uv.text)
+
+
+                var name = pv.text.toString()
+                var fb = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $name")
+                    fb.get().addOnSuccessListener { document ->
+                        if (document != null){
+                            println("got some : ${document.data}")
+                            val tasklist = document.get("task") as ArrayList<*>
+                            println("list is : ${tasklist}")
+                            if (tasklist.size==1){
+                                fb.update("state", "complete")
+
+
+                            }else {
+                                for (j in 0..tasklist.size - 1) {
+                                    println("Checking ${tasklist[j].toString()} to ${tv.text.toString()}")
+                                    if (tasklist[j].toString().contains(tv.text.toString()))
+                                        stateList[j] = "[complete]"
+                                    fb.update("state", stateList)
+                                    println("Sucess?")
+                                    break
+                                }
+                            }
+                        }else{
+                            println("document does not exist?")
+                        }
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        intent.putExtra("user",uv.text.toString())
+                        intent.putExtra("position","worker")
+                        startActivity(intent)
+                        finish()
+
+
+                    }
+                //val updateTarget = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $pv.text")
+                //updateTarget.update("state", "complete")
+                 //           .addOnSuccessListener { Log.d(TAG, " successfully updated!") }
+                  //          .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
                 //MISSING UPDATE DATABASE
             }
 
