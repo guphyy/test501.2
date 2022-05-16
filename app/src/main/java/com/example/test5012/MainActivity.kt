@@ -10,6 +10,7 @@ import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     class FirebaseUtils {
         val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
+
     private fun testWorker(map: Map<*,*>,user: String): Boolean {
         val tester = map.get("worker").toString()
         var booltest = false
@@ -98,9 +100,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val TaskV = TextView(this)
             val StatusV = TextView(this)
             val WorkerV = TextView(this)
-            TaskV.text = projectlistall["task"].toString()
-            StatusV.text =projectlistall["state"].toString()
-            WorkerV.text = projectlistall["worker"].toString()
+            val listTitle = TextView(this)
+            listTitle.text = " task, state, worker: "
+            TaskV.text = projectlistall["task"].toString().trim { it <= '[' }.trim { it <= ']' } + ","
+            StatusV.text =projectlistall["state"].toString().trim { it <= '[' }.trim { it <= ']' } + ","
+            WorkerV.text = projectlistall["worker"].toString().trim { it <= '[' }.trim { it <= ']' } + ","
             val Button = Button(this)
             Button.id = bt_id;
             println("button id is : ${Button.id}")
@@ -108,6 +112,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             TaskV.id = 100+bt_id
             WorkerV.id = 1000+bt_id
+            hlistV.orientation = VERTICAL
+            hlistV.addView(listTitle)
+
             hlistV.addView(TaskV)
             hlistV.addView(StatusV)
             hlistV.addView(WorkerV)
@@ -117,10 +124,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             list.addView(hlistV)
         }
         val cvCard = CardView(this)
-        cvCard.radius = 15f
-        cvCard.setCardBackgroundColor(Color.parseColor("#009688"))
-        cvCard.setContentPadding(36,36,36,36)
+        cvCard.radius = 45f
+        cvCard.setCardBackgroundColor(Color.parseColor("#D4F2E7"))
+        cvCard.setContentPadding(36,36,36,60)
         cvCard.cardElevation = 30f
+
+
+
+
 
         cvCard.addView(list)
         return cvCard
@@ -145,6 +156,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         userStorage.isVisible = false
         //////////////  ///////////////////////////////////////////////////////////////////////
         var fb = FirebaseUtils().fireStoreDatabase.collection("projects")
+
         fb.get().addOnSuccessListener { querySnapshot ->
             querySnapshot.forEach { document ->
                 Log.d(TAG, "Read document with ID ${document.id}")
@@ -155,23 +167,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 if (testWorker(projectlistall,user)||manager) {
                     println(document.data)
+                    val tvTitleProjectName = TextView(this)
+                    tvTitleProjectName.text = "ProjectName:"
                     val tvProjectName = TextView(this)
-                    tvProjectName.text =  name
+                    tvProjectName.text = "    $name"
+                    tvProjectName.textSize = 1f
+
+                    val tvTitleDeadline = TextView(this)
+                    tvTitleDeadline.text = "Deadline:"
                     val tvDeadline = TextView(this)
-                    tvDeadline.text =  projdeadline
+                    tvDeadline.text =  "    $projdeadline"
+                    tvDeadline.textSize = 1f
+
                     //NEED CODE FOR NUMBER OF WORKERS IN AN ARRAY
                     val tvMang = TextView(this)
                     tvMang.text =  user //REPLACE WITH MANAGER
+                    tvMang.textSize = 1f
 
                     val list = LinearLayout(this)
                     list.orientation = VERTICAL
+                    list.addView(tvTitleProjectName)
                     list.addView(tvProjectName)
+                    list.addView(tvTitleDeadline)
                     list.addView(tvDeadline)
                     list.addView(tvMang)
                     var cvCard = createCard(workertester,projectlistall,user,list,bt_id,manager)
 
                     tvProjectName.id = bt_id+2000
                     linear.addView(cvCard)
+                    val blank = TextView(this)
+                    blank.width = 15
+                    linear.addView(blank)
 
 
                 }else{

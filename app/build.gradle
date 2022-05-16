@@ -33,6 +33,9 @@ android {
         jvmTarget = '1.8'
     }
     namespace 'com.example.test5012'
+
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
 }
 
 dependencies {
