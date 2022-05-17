@@ -38,7 +38,7 @@
         android:layout_marginBottom="4dp"
         android:onClick="onClick"
         android:text="log out"
-        android:textColor="@color/color_btn"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
