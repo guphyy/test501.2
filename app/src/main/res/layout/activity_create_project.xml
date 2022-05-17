@@ -153,16 +153,6 @@
                         android:inputType="text" />
 
                     <EditText
-                        android:id="@+id/et_registeractivity_worker_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="0dp"
-                        android:gravity="center_vertical"
-                        android:hint="Please enter email of worker"
-                        android:inputType="text" />
-
-                    <EditText
                         android:id="@+id/et_registeractivity_taskDdl"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"

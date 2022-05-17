@@ -147,6 +147,12 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     .addOnFailureListener { exception ->
                         Log.w(TAG, "Error adding document $exception")
                     }
+                val intent4 = Intent(this, MainActivity::class.java)
+                println("Going back from activity $managerName")
+                intent4.putExtra("user",managerName)
+                intent4.putExtra("position","manager")
+                startActivity(intent4)
+                finish()
             }
 
 
@@ -154,6 +160,9 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
             R.id.bt_registeractivity_add -> {
                 temp++
                 var myFlowLayout = findViewById<LinearLayout>(R.id.add_here)
+                var title = TextView(this)
+                title.text = "Task 2"
+
                 var registerTask = EditText(this)
                 registerTask.hint = "Please describe next task$temp"
                 //registerTask.setText("idle")
@@ -224,7 +233,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
 
 
 
-
+                myFlowLayout.addView(title)
                 myFlowLayout.addView(registerTask)
                 myFlowLayout.addView(registerWorker)
                 myFlowLayout.addView(registerWorkerEmail)
