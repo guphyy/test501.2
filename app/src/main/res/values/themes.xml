@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.Test5012" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#FFD700</item>
-        <item name="colorPrimaryVariant">#FFD700</item>
+        <item name="colorPrimary">@color/color_btn</item>
+        <item name="colorPrimaryVariant">@color/cardview_dark_background</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
