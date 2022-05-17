@@ -18,6 +18,7 @@ var workerList = arrayListOf<String>()
 var taskList = arrayListOf<String>()
 var stateList = arrayListOf<String>()
 var ddlList = arrayListOf<String>()
+var emailList = arrayListOf<String>()
 
 
 class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
@@ -26,11 +27,13 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
     private var mEtRegisterActivityDeadline: EditText? = null
     private var mEtRegisterActivityTask: EditText? = null
     private var mEtRegisterActivityWorker: EditText? = null
+    private var mEtRegisterActivityWorkerEmail: EditText? = null
     private var mEtRegisterActivityTaskDeadline: EditText? = null
     private var mEtRegisterActivityState: EditText? = null
 
     private var mEtRegisterActivityTaskAdd: EditText? = null
     private var mEtRegisterActivityWorkerAdd: EditText? = null
+    private var mEtRegisterActivityWorkerEmailAdd: EditText? = null
     private var mEtRegisterActivityStateAdd: EditText? = null
     private var managername_m: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
         mEtRegisterActivityTask = findViewById(R.id.et_registeractivity_task)
         mEtRegisterActivityTaskDeadline = findViewById(R.id.et_registeractivity_taskDdl)
         mEtRegisterActivityWorker = findViewById(R.id.et_registeractivity_worker)
+        mEtRegisterActivityWorkerEmail = findViewById(R.id.et_registeractivity_worker_email)
         mEtRegisterActivityState = findViewById(R.id.et_registeractivity_state)
         mEtRegisterActivityTaskAdd = findViewById(R.id.task_add)
         mEtRegisterActivityWorkerAdd = findViewById(R.id.worker_add)
@@ -90,6 +94,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val projectDeadline = mEtRegisterActivityDeadline!!.text.toString().trim() { it <= ' ' }
                 val task = mEtRegisterActivityTask!!.text.toString().trim() { it <= ' ' }
                 val worker = mEtRegisterActivityWorker!!.text.toString().trim() { it <= ' ' }
+                val email = mEtRegisterActivityWorkerEmail!!.text.toString().trim() {it <= ' '}
                 val taskDeadline = mEtRegisterActivityTaskDeadline!!.text.toString().trim() { it <= ' ' }
                 val state = mEtRegisterActivityState!!.text.toString().trim() { it <= ' ' }
                 val managerName = intent.getStringExtra("managername").toString()
@@ -99,6 +104,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 taskList.add(task)
                 stateList.add(state)
                 ddlList.add(taskDeadline)
+                emailList.add(email)
 
                 if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(projectDeadline) && !TextUtils.isEmpty(task) && !TextUtils.isEmpty(worker) && !TextUtils.isEmpty(state)) {
                     mDBOpenHelperProject!!.add(projectName, projectDeadline, task, worker, state)
@@ -128,6 +134,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     "task" to taskList,
                     "taskDdl" to ddlList,
                     "worker" to workerList,
+                    "emails" to emailList,
                     "state" to stateList,
                     "submit_by" to managerName
                 )
@@ -161,6 +168,13 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 registerWorker.tag = temp
                 registerWorker.id = R.id.worker_add
 
+                val registerWorkerEmail = EditText(this)
+                registerWorkerEmail.hint = "Please enter email of worker$temp"
+                //registerWorkerEmail.setText("idle")
+                registerWorkerEmail.width = 1000
+                registerWorkerEmail.tag = temp
+                registerWorkerEmail.id = R.id.worker_email_add
+
                 val registerDDL = EditText(this)
                 registerDDL.hint = "Please input deadline of task$temp"
                 //registerDDL.setText("idle")
@@ -185,9 +199,11 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     val deadline = mEtRegisterActivityDeadline!!.text.toString().trim() { it <= ' ' }
                     val taskAdd = registerTask.text.toString().trim() { it <= ' ' }
                     val workerAdd = registerWorker.text.toString().trim() { it <= ' ' }
+                    val emailAdd = registerWorkerEmail.text.toString().trim() { it <= ' ' }
                     val stateAdd = registerState.text.toString().trim() { it <= ' ' }
                     val ddlOftasks = registerDDL.text.toString().trim() {it <= ' '}
                     workerList.add(workerAdd)
+                    emailList.add(emailAdd)
                     taskList.add(taskAdd)
                     stateList.add(stateAdd)
                     ddlList.add(ddlOftasks)
@@ -210,8 +226,9 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
 
 
                 myFlowLayout.addView(registerTask)
-                myFlowLayout.addView(registerDDL)
                 myFlowLayout.addView(registerWorker)
+                myFlowLayout.addView(registerWorkerEmail)
+                myFlowLayout.addView(registerDDL)
                 myFlowLayout.addView(registerState)
                 myFlowLayout.addView(addNewTaskBtn)
 

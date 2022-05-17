@@ -4,4 +4,5 @@
     <item name="worker_add" type="id" />
     <item name="status_add" type="id" />
     <item name="taskDdl_add" type="id" />
+    <item name="worker_email_add" type="id"/>
 </resources>

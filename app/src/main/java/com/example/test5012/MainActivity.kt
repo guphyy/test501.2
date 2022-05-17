@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     hlistV.addView(WorkerV)
 
-                    hlistV.addView(WorkerV)
+                    //hlistV.addView(WorkerV)
                     hlistV.addView(deadlineV)
 
                     hlistV.addView(ProjNameV)
@@ -267,9 +267,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     tvTeamTitle.text =  "Team members"
                     tvTeamTitle.textSize = 18f
 
-                    val tvProjectTeam = TextView(this)
-                    tvProjectTeam.text =  "    $workertester"
-                    tvProjectTeam.textSize = 18f
+                    //val tvProjectTeam = TextView(this)
+                    //tvProjectTeam.text =  "    $workertester"
+                    //tvProjectTeam.textSize = 18f
 
                     //NEED CODE FOR NUMBER OF WORKERS IN AN ARRAY
                     val tvMangTitle = TextView(this)
@@ -300,7 +300,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     list.addView(tvDeadline)
 
                     list.addView(tvTeamTitle)
-                    list.addView(tvProjectTeam)
+                    //list.addView(tvProjectTeam)
                     if((!manager)&&(!projstate.contains("complete"))) {
                         list.addView(listTitle)
                     }
