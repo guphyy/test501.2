@@ -14,12 +14,16 @@ import android.view.Gravity
 import android.view.View
 import android.widget.*
 import android.widget.LinearLayout.VERTICAL
+import android.widget.LinearLayout.Z
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import android.app.NotificationManager as notificationManager
 
 
@@ -35,9 +39,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelperProject: DBOpenHelperProject? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var username :String= intent.getStringExtra("user").toString()
-        var pos :String= intent.getStringExtra("position").toString()
-        println("user $username , $pos")
+        var username: String = intent.getStringExtra("user").toString()
+        var pos: String = intent.getStringExtra("position").toString()
+        //println("user $username , $pos")
 
         setContentView(R.layout.activity_main)
         initView(username,pos)
@@ -49,7 +53,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     class FirebaseUtils {
         val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
-    private fun testWorker(map: Map<*,*>,user: String): Boolean {
+
+    private fun testWorker(map: Map<*, *>, user: String): Boolean {
         val tester = map.get("worker").toString()
         var booltest = false
         if (tester.contains(",")) {
@@ -65,88 +70,125 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         return booltest
     }
-    private fun createCard(workertester: String, projectlistall: Map<*,*>, user: String,list:LinearLayout,bt_id: Int, manager:Boolean, projName: String):Pair<CardView, Int> {
+
+    private fun createCard(
+        workertester: String,
+        projectlistall: Map<*, *>,
+        user: String,
+        list: LinearLayout,
+        bt_id: Int,
+        manager: Boolean,
+        projName: String
+    ): Pair<CardView, Int> {
         var bt_id_runner = bt_id
-        if (workertester.contains(",")){
+        if (workertester.contains(",")) {
             val workerlist = projectlistall.get("worker") as ArrayList<*>
             val statelist = projectlistall.get("state") as ArrayList<*>
             val tasklist = projectlistall.get("task") as ArrayList<*>
-            for (j in 0..workerlist.size-1) {
+            val projectman = projectlistall.get("submit_by").toString()
+            var taskDdlList = projectlistall["taskDdl"] as ArrayList<*>
+            for (j in 0..workerlist.size - 1) {
                 var b1 = workerlist[j].toString().contains(user)
                 var b2 = statelist[j].toString().contains("onGoing")
-                if ((b1&&b2)||manager) {
+                var b3 = projectman.contains(user)
+                if ((!manager &&(b1 && b2)) || (manager)) {
                     val hlistV = LinearLayout(this)
                     val TaskV = TextView(this)
                     val StatusV = TextView(this)
                     val WorkerV = TextView(this)
                     val ProjNameV = TextView(this)
+                    val deadlineV = TextView(this)
 
 
                     var TaskVText = tasklist[j].toString()
                     var StateText = statelist[j].toString()
                     var WorkerVText = workerlist[j].toString()
+
                     TaskV.text = "   Task: $TaskVText"
                     StatusV.text = "   State: $StateText"
+
                     if (StateText == "onGoing"){
                         StatusV.setTextColor(Color.parseColor("#ff0000"))
                     }
 
+
                     WorkerV.text = "   Worker: $WorkerVText"
+
+                    var taskDdl = taskDdlList[j].toString()
+                    deadlineV.text = "   Due by: $taskDdl"
+
                     ProjNameV.text = projName
                     ProjNameV.isVisible = false
                     val Button = Button(this)
                     Button.id = bt_id_runner;
-                    println("button id is : ${Button.id}")
+                    //println("button id is : ${Button.id}")
                     Button.setOnClickListener(this)
-                    TaskV.id = 100+bt_id_runner
-                    WorkerV.id = 1000+bt_id_runner
-                    ProjNameV.id = 2000+bt_id_runner
-                    bt_id_runner =bt_id_runner+ 1
+                    TaskV.id = 100 + bt_id_runner
+                    WorkerV.id = 1000 + bt_id_runner
+                    ProjNameV.id = 2000 + bt_id_runner
+                    bt_id_runner = bt_id_runner + 1
                     hlistV.addView(TaskV)
 
                     hlistV.addView(WorkerV)
 
-                    hlistV.addView(StatusV)
+                    hlistV.addView(WorkerV)
+                    hlistV.addView(deadlineV)
 
                     hlistV.addView(ProjNameV)
-                    if (!manager ){
+                    if (!manager) {
                         hlistV.addView(Button)
                     }
                     list.addView(hlistV)
                 }
 
             }
-        }else {
-            if (projectlistall["state"].toString().contains("onGoing")) {
+        } else {
+            if (projectlistall["state"].toString().contains("onGoing")||manager) {
                 val hlistV = LinearLayout(this)
                 val TaskV = TextView(this)
                 val StatusV = TextView(this)
                 val WorkerV = TextView(this)
+                val deadlineV = TextView(this)
 
+                val TaskVText = (projectlistall["task"].toString()).drop(1).dropLast(1)
+                val StateText = (projectlistall["state"].toString())
 
+                TaskV.text = "   Task: $TaskVText"
+                StatusV.text = "   State: $StateText"
+                if (StateText == "onGoing"){
+                    StatusV.setTextColor(Color.parseColor("#ff0000"))
+                }
 
-                TaskV.text = (projectlistall["task"].toString()).drop(1).dropLast(1)
-                StatusV.text = (projectlistall["project_state"].toString()).drop(1).dropLast(1)
-                WorkerV.text = (projectlistall["worker"].toString()).drop(1).dropLast(1)
+                var WorkerVText = (projectlistall["worker"].toString()).drop(1).dropLast(1)
+                WorkerV.text = "   Worker: $WorkerVText"
+
                 var taskDdl = projectlistall["taskDdl"].toString().drop(1).dropLast(1)
+                deadlineV.text = "   Due by: $taskDdl"
                 val Button = Button(this)
                 Button.id = bt_id_runner;
-                println("button id is : ${Button.id}")
+                //println("button id is : ${Button.id}")
                 Button.setOnClickListener(this)
                 val ProjNameV = TextView(this)
                 ProjNameV.text = projName
                 ProjNameV.isVisible = false
                 TaskV.id = 100 + bt_id_runner
                 WorkerV.id = 1000 + bt_id_runner
-                ProjNameV.id = bt_id_runner+2000
+                ProjNameV.id = bt_id_runner + 2000
+
                 hlistV.addView(TaskV)
                 hlistV.addView(StatusV)
                 hlistV.addView(WorkerV)
+                list.addView(hlistV)
+                val hlistV2 = LinearLayout(this)
+                hlistV2.addView(deadlineV)
+                hlistV2.addView(ProjNameV)
                 if (!manager) {
-                    hlistV.addView(Button)
+                    Button.text = "Press when task is complete"
+                    hlistV2.addView(Button)
 
                 }
-                list.addView(hlistV)
+
+                list.addView(hlistV2)
             }
         }
         val cvCard = CardView(this)
@@ -157,7 +199,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cvCard.cardElevation = 30f
 
         cvCard.addView(list)
-        return Pair(cvCard , bt_id_runner)
+        return Pair(cvCard, bt_id_runner)
     }
 
     private fun initView(user: String, pos: String){
@@ -181,33 +223,63 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var bt_id = 0
 
         //////////////  ///////////////////////////////////////////////////////////////////////
+
         var fb = FirebaseUtils().fireStoreDatabase.collection("projects")
         fb.get().addOnSuccessListener { querySnapshot ->
             querySnapshot.forEach { document ->
                 Log.d(TAG, "Read document with ID ${document.id}")
                 var projectlistall = document.getData() as Map<*,*>
-                val workertester = projectlistall["worker"].toString() //Checks if there is an array or string, crashes without
+                val workertester = projectlistall["worker"].toString().drop(1).dropLast(1)
                 val name = projectlistall["projectName"].toString()
                 val projdeadline = projectlistall["deadline"].toString()
+                val projstate = projectlistall["project_state"].toString()
+                val mang = projectlistall["submit_by"].toString()
 
-                if (testWorker(projectlistall,user)||manager) {
+                if (testWorker(projectlistall,user)||manager&&mang.contains(user)) {
                     println(document.data)
                     val tvTitleProjectName = TextView(this)
                     tvTitleProjectName.text = "Project:"
-                    //tvTitleProjectName.textSize =18f
+                    tvTitleProjectName.textSize =22f
+
                     val tvProjectName = TextView(this)
                     tvProjectName.text =  "    $name"
-                    tvProjectName.textSize = 18f
+                    tvProjectName.textSize = 22f
+
+
+                    val tvProjectStateTitle = TextView(this)
+                    tvProjectStateTitle.text =  "Project State"
+                    tvProjectStateTitle.textSize = 18f
+
+                    val tvProjectState = TextView(this)
+                    tvProjectState.text =  "    $projstate"
+                    tvProjectState.textSize = 18f
 
                     val tvTitleDeadline = TextView(this)
                     tvTitleDeadline.text = "Deadline:"
+                    tvTitleDeadline.textSize = 18f
+
                     //tvTitleDeadline.textSize = 18f
                     val tvDeadline = TextView(this)
                     tvDeadline.text =  "     $projdeadline"
                     tvDeadline.textSize = 18f
+
+                    val tvTeamTitle = TextView(this)
+                    tvTeamTitle.text =  "Team members"
+                    tvTeamTitle.textSize = 18f
+
+                    val tvProjectTeam = TextView(this)
+                    tvProjectTeam.text =  "    $workertester"
+                    tvProjectTeam.textSize = 18f
+
                     //NEED CODE FOR NUMBER OF WORKERS IN AN ARRAY
+                    val tvMangTitle = TextView(this)
+                    tvMangTitle.text =  "manager: " //REPLACE WITH MANAGER
+                    tvMangTitle.textSize = 18f
+
                     val tvMang = TextView(this)
-                    tvMang.text =  user //REPLACE WITH MANAGER
+                    tvMang.text =  "    $mang" //REPLACE WITH MANAGER
+                    tvMang.textSize = 18f
+
                     val listTitle = TextView(this)
                     listTitle.text = "Task list:"
                     listTitle.textSize = 18f
@@ -217,10 +289,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     list.orientation = VERTICAL
                     list.addView(tvTitleProjectName)
                     list.addView(tvProjectName)
+
+                    list.addView(tvProjectStateTitle)
+                    list.addView(tvProjectState)
+
+                    list.addView(tvMangTitle)
+                    list.addView(tvMang)
+
                     list.addView(tvTitleDeadline)
                     list.addView(tvDeadline)
-                    list.addView(listTitle)
-                    //list.addView(tvMang)
+
+                    list.addView(tvTeamTitle)
+                    list.addView(tvProjectTeam)
+                    if((!manager)&&(!projstate.contains("complete"))) {
+                        list.addView(listTitle)
+                    }
                     var (cvCard,bt_id) = createCard(workertester,projectlistall,user,list,bt_id,manager, name)
 
                     val blank = TextView(this)
@@ -232,15 +315,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     linear.addView(blank)
 
 
-                }else{
+                        } else {
 
-                    println(document.data["workers"])
+                            println(document.data["workers"])
+                        }
+                    }
                 }
-            }
-        }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents $exception")
-            }
 //////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -311,66 +391,55 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 finish()
             }
 
-            R.id.bt_updateSomething -> {
-
-                val projectName: String? = null
-                //this 'projectname' above needs to be replaced with the current project name in order to locate the target document
-                val updateTarget = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $projectName")
-                updateTarget.update("state", "complete")
-                    //The first is the key of the object to be updated, the second is the value after the update.
-                    .addOnSuccessListener { Log.d(TAG, " successfully updated!") }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
-            }
-
-
             else ->{
                 var i:Int = view.id
-                println(i)
                 val tv: TextView = findViewById(100+i)
                 val uv: TextView = findViewById(1000+i)
                 val pv: TextView = findViewById(2000+i)
-                println(pv.text)
-                println(tv.text)
-                println(uv.text)
 
 
                 var name = pv.text.toString()
                 var fb = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $name")
                     fb.get().addOnSuccessListener { document ->
                         if (document != null){
-                            println("got some : ${document.data}")
+                            var completeCheck = true
                             val tasklist = document.get("task") as ArrayList<*>
-                            println("list is : ${tasklist}")
+                            var statelist = document.get("state") as ArrayList<*>
                             if (tasklist.size==1){
                                 fb.update("state", "complete")
+                                fb.update("project_state", "complete")
 
 
                             }else {
+                                var myList = arrayListOf<String>()
+
                                 for (j in 0..tasklist.size - 1) {
-                                    println("Checking ${tasklist[j].toString()} to ${tv.text.toString()}")
-                                    if (tasklist[j].toString().contains(tv.text.toString()))
-                                        stateList[j] = "[complete]"
-                                    fb.update("state", stateList)
-                                    println("Sucess?")
-                                    break
+
+                                    if (tasklist[j].toString().contains(tv.text.toString())) {
+                                        myList.add("complete")
+                                    }else{
+                                        myList.add(statelist[j].toString())
+                                        if(!statelist[j].toString().contains("complete")){
+                                            completeCheck = false
+                                        }
+                                    }
                                 }
+                                fb.update("state", myList)
+                            }
+                            if(completeCheck){
+                                fb.update("project_state", "complete")
                             }
                         }else{
                             println("document does not exist?")
                         }
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        intent.putExtra("user",uv.text.toString())
-                        intent.putExtra("position","worker")
-                        startActivity(intent)
-                        finish()
+                        var pos :String= intent.getStringExtra("position").toString()
+                        var username :String= intent.getStringExtra("user").toString()
+                        startActivity(Intent(this, MainActivity::class.java).putExtra("user", username).putExtra("position", pos))
+
 
 
                     }
-                //val updateTarget = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $pv.text")
-                //updateTarget.update("state", "complete")
-                 //           .addOnSuccessListener { Log.d(TAG, " successfully updated!") }
-                  //          .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
-                //MISSING UPDATE DATABASE
+
             }
 
 
