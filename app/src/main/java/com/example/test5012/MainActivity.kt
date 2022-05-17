@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         val cvCard = CardView(this)
         cvCard.radius = 15f
-        cvCard.setCardBackgroundColor(Color.parseColor("#F5F5F5"))
+        cvCard.setCardBackgroundColor(Color.parseColor("#FFEFD5"))
         cvCard.setContentPadding(36,36,36,36)
         cvCard.cardElevation = 30f
 
