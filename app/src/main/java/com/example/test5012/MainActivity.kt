@@ -15,38 +15,27 @@ import android.view.Gravity
 import android.view.View
 import android.widget.*
 import android.widget.LinearLayout.VERTICAL
-import android.widget.LinearLayout.Z
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
-import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import android.app.NotificationManager as notificationManager
 
-
-data class Project(
-    val worker: List<String> ,
-    val task: List<String>,
-    val state: List<String>,
-    val deadline:String = "",
-    val projectName:String = ""
-)
 var CHANNEL_ID = "msg"
+
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelperProject: DBOpenHelperProject? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var username: String = intent.getStringExtra("user").toString()
-        var pos: String = intent.getStringExtra("position").toString()
+        val username: String = intent.getStringExtra("user").toString()
+        val  pos: String = intent.getStringExtra("position").toString()
         //println("user $username , $pos")
-
         setContentView(R.layout.activity_main)
-        initView(username,pos)
         createNotificationChannel()
+
+        initView(username,pos)
         mDBOpenHelperProject = DBOpenHelperProject(this)
     }
 
@@ -55,150 +44,143 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val fireStoreDatabase = FirebaseFirestore.getInstance()
     }
 
-    private fun testWorker(map: Map<*, *>, user: String): Boolean {
-        val tester = map.get("worker").toString()
-        var booltest = false
+    private fun testWorker(map: Map<*, *>, user: String): Boolean {//simple checker if worker exists in map
+        val tester = map["worker"].toString()
+        var boolTest = false
         if (tester.contains(",")) {
-            val worker_list = map.get("worker") as ArrayList<*>
-            for (i in 0 until worker_list.size) {
-                if (worker_list.get(i).toString().contains(user)) {
-                    booltest = true
+            val workerList = map["worker"] as ArrayList<*>
+            for (i in 0 until workerList.size) {
+                if (workerList[i].toString().contains(user)) {
+                    boolTest = true
                     break
                 }
             }
         } else {
-            booltest = tester.contains(user)
+            boolTest = tester.contains(user)
         }
-        return booltest
+        return boolTest
     }
 
     @SuppressLint("SetTextI18n")
     private fun createCard(
-        workertester: String,
-        projectlistall: Map<*, *>,
+        workerTester: String,
+        projectListAll: Map<*, *>,
         user: String,
         list: LinearLayout,
         bt_id: Int,
         manager: Boolean,
         projName: String
     ): Pair<CardView, Int> {
-        var bt_id_runner = bt_id
-        if (workertester.contains(",")) {
-            val workerlist = projectlistall.get("worker") as ArrayList<*>
-            val statelist = projectlistall.get("state") as ArrayList<*>
-            val tasklist = projectlistall.get("task") as ArrayList<*>
-            val projectman = projectlistall.get("submit_by").toString()
-            var taskDdlList = projectlistall["taskDdl"] as ArrayList<*>
-            for (j in 0..workerlist.size - 1) {
-                var b1 = workerlist[j].toString().contains(user)
-                var b2 = statelist[j].toString() != null
-                var b3 = projectman.contains(user)
-                if ((!manager &&(b1 && b2)) || (manager && b3)) {
-                    val hlistV = LinearLayout(this)
-                    val TaskV = TextView(this)
-                    val StatusV = TextView(this)
-                    val WorkerV = TextView(this)
-                    val ProjNameV = TextView(this)
+        var btIdRunner = bt_id
+        if (workerTester.contains(",")) {
+            val workerList = projectListAll["worker"] as ArrayList<*>
+            val stateList = projectListAll["state"] as ArrayList<*>
+            val taskList = projectListAll["task"] as ArrayList<*>
+            val projectManager = projectListAll["submit_by"].toString()
+            val taskDdlList = projectListAll["taskDdl"] as ArrayList<*>
+            for (j in 0 until workerList.size) {
+                val b1 = workerList[j].toString().contains(user)
+                val b2 = projectManager.contains(user)
+                if ((!manager && b1) || (manager && b2)) {
+                    //set up views
+                    val horizontalListView = LinearLayout(this)
+                    val horizontalListView2 = LinearLayout(this)
+                    val taskView = TextView(this)
+                    val statusView = TextView(this)
+                    val workerView = TextView(this)
                     val deadlineV = TextView(this)
-
-
-                    var TaskVText = tasklist[j].toString()
-                    var StateText = statelist[j].toString()
-                    var WorkerVText = workerlist[j].toString()
-
-                    TaskV.text = "   Task: $TaskVText"
-                    StatusV.text = "   State: $StateText"
-
-                    if (StateText == "onGoing"){
-                        StatusV.setTextColor(Color.parseColor("#ff0000"))
+                    val button = Button(this)
+                    val projNameView = TextView(this)
+                    //running data
+                    val taskViewText = taskList[j].toString()
+                    val taskDeadline = taskDdlList[j].toString()
+                    val stateText = stateList[j].toString()
+                    val workerViewText = workerList[j].toString()
+                    //make text
+                    taskView.text = "   Task: $taskViewText"
+                    statusView.text = "   State: $stateText"
+                    if (stateText == "onGoing"){
+                        statusView.setTextColor(Color.parseColor("#ff0000"))
                     }
-                    if (StateText == "complete"){
-                        StatusV.setTextColor(Color.parseColor("#7CFC00"))
+                    if (stateText == "complete"){
+                        statusView.setTextColor(Color.parseColor("#7CFC00"))
                     }
+                    workerView.text = "   Worker: $workerViewText"
+                    deadlineV.text = "   Due by: $taskDeadline"
+                    projNameView.text = projName
+                    projNameView.isVisible = false // for simplicity in onclick
 
+                    button.id = btIdRunner
+                    taskView.id = 100 + btIdRunner
+                    workerView.id = 1000 + btIdRunner
+                    projNameView.id = 2000 + btIdRunner
+                    btIdRunner += 1
+                    //add views
+                    button.setOnClickListener(this)
+                    horizontalListView.addView(taskView)
+                    horizontalListView.addView(workerView)
+                    list.addView(horizontalListView)
 
-                    WorkerV.text = "   Worker: $WorkerVText"
-
-                    var taskDdl = taskDdlList[j].toString()
-                    deadlineV.text = "   Due by: $taskDdl"
-
-                    ProjNameV.text = projName
-                    ProjNameV.isVisible = false
-                    val Button = Button(this)
-
-                    Button.id = bt_id_runner;
-                    //println("button id is : ${Button.id}")
-                    Button.setOnClickListener(this)
-                    TaskV.id = 100 + bt_id_runner
-                    WorkerV.id = 1000 + bt_id_runner
-                    ProjNameV.id = 2000 + bt_id_runner
-                    bt_id_runner = bt_id_runner + 1
-                    hlistV.addView(TaskV)
-                    hlistV.addView(WorkerV)
-                   list.addView(hlistV)
-
-                    var hlistV2 = LinearLayout(this)
-                    hlistV2.addView(StatusV)
-                    hlistV2.addView(deadlineV)
-                    hlistV2.addView(ProjNameV)
-                    if (((!manager) && (StateText=="onGoing"))) {
-                        hlistV2.addView(Button)
+                    horizontalListView2.addView(statusView)
+                    horizontalListView2.addView(deadlineV)
+                    horizontalListView2.addView(projNameView)
+                    if (((!manager) && (stateText=="onGoing"))) {
+                        button.text = "Press when task is complete"
+                        horizontalListView2.addView(button)
                     }
-                    list.addView(hlistV2)
+                    list.addView(horizontalListView2)
                 }
 
             }
-        } else {
-            if (projectlistall["state"] != null ||manager) {
-                val hlistV = LinearLayout(this)
-                val TaskV = TextView(this)
-                val StatusV = TextView(this)
-                val WorkerV = TextView(this)
+        } else {//if only one string is in array things get weird for some reason, cant get [0] as string so we have to "cheat"
+            if (projectListAll["state"] != null ||manager) {
+                //make views
+                val horizontalListView = LinearLayout(this)
+                val horizontalListView2 = LinearLayout(this)
+                val taskView = TextView(this)
+                val statusView = TextView(this)
+                val workerView = TextView(this)
                 val deadlineV = TextView(this)
+                //get data once
+                val taskViewText = (projectListAll["task"].toString()).drop(1).dropLast(1) //takes the [] off, weirdness from one string array
+                val stateText = (projectListAll["state"].toString()).drop(1).dropLast(1)
+                val workerViewText = (projectListAll["worker"].toString()).drop(1).dropLast(1)
+                val taskDeadline = projectListAll["taskDdl"].toString().drop(1).dropLast(1)
+                val button = Button(this)
+                val projNameView = TextView(this)
 
-                val TaskVText = (projectlistall["task"].toString()).drop(1).dropLast(1)
-                val StateText = (projectlistall["state"].toString()).drop(1).dropLast(1)
-
-                TaskV.text = "   Task: $TaskVText"
-                StatusV.text = "   State: $StateText"
-                if (StateText == "onGoing"){
-                    StatusV.setTextColor(Color.parseColor("#ff0000"))
+                // text
+                taskView.text = "   Task: $taskViewText"
+                statusView.text = "   State: $stateText"
+                workerView.text = "   Worker: $workerViewText"
+                deadlineV.text = "   Due by: $taskDeadline"
+                projNameView.text = projName //invisible to make onClick simpler
+                projNameView.isVisible = false
+                if (stateText == "onGoing"){
+                    statusView.setTextColor(Color.parseColor("#ff0000"))
                 }
-                if (StateText == "complete"){
-                    StatusV.setTextColor(Color.parseColor("#7CFC00"))
+                if (stateText == "complete"){
+                    statusView.setTextColor(Color.parseColor("#7CFC00"))
                 }
+                button.setOnClickListener(this)
+                //setting ids for callback
+                button.id = btIdRunner
+                taskView.id = 100 + btIdRunner
+                workerView.id = 1000 + btIdRunner
+                projNameView.id = btIdRunner + 2000
+                //adding views
+                horizontalListView.addView(taskView)
 
-
-                var WorkerVText = (projectlistall["worker"].toString()).drop(1).dropLast(1)
-                WorkerV.text = "   Worker: $WorkerVText"
-
-                var taskDdl = projectlistall["taskDdl"].toString().drop(1).dropLast(1)
-                deadlineV.text = "   Due by: $taskDdl"
-                val Button = Button(this)
-                Button.id = bt_id_runner;
-                //println("button id is : ${Button.id}")
-                Button.setOnClickListener(this)
-                val ProjNameV = TextView(this)
-                ProjNameV.text = projName
-                ProjNameV.isVisible = false
-                TaskV.id = 100 + bt_id_runner
-                WorkerV.id = 1000 + bt_id_runner
-                ProjNameV.id = bt_id_runner + 2000
-
-                hlistV.addView(TaskV)
-                hlistV.addView(StatusV)
-                hlistV.addView(WorkerV)
-                list.addView(hlistV)
-                val hlistV2 = LinearLayout(this)
-                hlistV2.addView(deadlineV)
-                hlistV2.addView(ProjNameV)
-                if (!manager && StateText == "onGoing" ) {
-                    Button.text = "Press when task is complete"
-                    hlistV2.addView(Button)
-
+                horizontalListView.addView(workerView)
+                list.addView(horizontalListView)
+                horizontalListView2.addView(statusView)
+                horizontalListView2.addView(deadlineV)
+                horizontalListView2.addView(projNameView)
+                if (!manager && stateText == "onGoing" ) {
+                    button.text = "Press when task is complete"
+                    horizontalListView2.addView(button)
                 }
-
-                list.addView(hlistV2)
+                list.addView(horizontalListView2)
             }
         }
         val cvCard = CardView(this)
@@ -209,72 +191,69 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cvCard.cardElevation = 30f
 
         cvCard.addView(list)
-        return Pair(cvCard, bt_id_runner)
+        return Pair(cvCard, btIdRunner)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initView(user: String, pos: String){
 
         val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
+        mBtMainLogout.setOnClickListener(this)
+
         val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
         val searchUser = findViewById<Button>(R.id.search_button)
         val searchText = findViewById<TextView>(R.id.SearchText)
 
-
+        //user dependant setup
         newProj.isEnabled = false
         newProj.isVisible = false
         var manager = false
-
         searchUser.isVisible = false
         searchText.isVisible = false
-
         if (pos == "manager"){
             newProj.isEnabled = true
             newProj.isVisible = true
             searchUser.isVisible = true
             searchText.isVisible = true
             searchUser.setOnClickListener(this)
-
-
             manager = true
         }else{
-            showNotification(this)
+            showNotification(this) // need to find solution to notification
         }
-        // get the layout and event
 
-        var linear = findViewById<LinearLayout>(R.id.fragment_bucket)
-
-        var bt_id = 0
-
-        //////////////  ///////////////////////////////////////////////////////////////////////
-
-        var fb = FirebaseUtils().fireStoreDatabase.collection("projects")
+        val linear = findViewById<LinearLayout>(R.id.fragment_bucket) // get main list (scrollable)
+        var btId = 0 // setup for id
+        //Starting the read from the database
+        val fb = FirebaseUtils().fireStoreDatabase.collection("projects")
         fb.get().addOnSuccessListener { querySnapshot ->
             querySnapshot.forEach { document ->
                 Log.d(TAG, "Read document with ID ${document.id}")
-                var projectlistall = document.getData() as Map<*,*>
-                val workertester = projectlistall["worker"].toString().drop(1).dropLast(1)
-                val name = projectlistall["projectName"].toString()
-                val projdeadline = projectlistall["deadline"].toString()
-                val projstate = projectlistall["project_state"].toString()
-                val mang = projectlistall["submit_by"].toString()
+                //Document has been read get data as MAP of String String
+                //note if there is only one string weirdness occurs
+                val projectListAll = document.data as Map<*,*>//cant be String,String because of weirdness
+                val workerTester = projectListAll["worker"].toString().drop(1).dropLast(1)//Gets the list of Workers without []
+                val name = projectListAll["projectName"].toString()
+                val projectDeadline = projectListAll["deadline"].toString()
+                val projectState = projectListAll["project_state"].toString()
+                val managerName = projectListAll["submit_by"].toString()
 
-                if (testWorker(projectlistall,user)||manager&&mang.contains(user)) {
+                if (testWorker(projectListAll,user)||manager&&managerName.contains(user)) {
                     println(document.data)
+                    //Title for the Project, appears first
                     val tvTitleProjectName = TextView(this)
                     tvTitleProjectName.text = "Project:"
                     tvTitleProjectName.textSize =22f
-
+                    //The actual name of the project
                     val tvProjectName = TextView(this)
                     tvProjectName.text =  "    $name"
                     tvProjectName.textSize = 22f
-
-
+                    //Title for the State of the project
                     val tvProjectStateTitle = TextView(this)
                     tvProjectStateTitle.text =  "Project State"
                     tvProjectStateTitle.textSize = 18f
-
+                    //you get the point
                     val tvProjectState = TextView(this)
-                    tvProjectState.text =  "    $projstate"
+                    tvProjectState.text =  "    $projectState"
                     tvProjectState.textSize = 18f
 
                     val tvTitleDeadline = TextView(this)
@@ -283,7 +262,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     //tvTitleDeadline.textSize = 18f
                     val tvDeadline = TextView(this)
-                    tvDeadline.text =  "     $projdeadline"
+                    tvDeadline.text =  "     $projectDeadline"
                     tvDeadline.textSize = 18f
 
                     val tvTeamTitle = TextView(this)
@@ -291,23 +270,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     tvTeamTitle.textSize = 18f
 
                     val tvProjectTeam = TextView(this)
-                    tvProjectTeam.text =  "    $workertester"
+                    tvProjectTeam.text =  "    $workerTester"
                     tvProjectTeam.textSize = 18f
 
-                    //NEED CODE FOR NUMBER OF WORKERS IN AN ARRAY
-                    val tvMangTitle = TextView(this)
-                    tvMangTitle.text =  "manager: " //REPLACE WITH MANAGER
-                    tvMangTitle.textSize = 18f
+                    val tvManagerTitle = TextView(this)
+                    tvManagerTitle.text =  "manager: "
+                    tvManagerTitle.textSize = 18f
 
-                    val tvMang = TextView(this)
-                    tvMang.text =  "    $mang" //REPLACE WITH MANAGER
-                    tvMang.textSize = 18f
+                    val tvManager = TextView(this)
+                    tvManager.text =  "    $managerName"
+                    tvManager.textSize = 18f
 
                     val listTitle = TextView(this)
                     listTitle.text = "Task list:"
                     listTitle.textSize = 18f
 
-
+                    //Create List for the card, this has no loops so kept outside of card
                     val list = LinearLayout(this)
                     list.orientation = VERTICAL
                     list.addView(tvTitleProjectName)
@@ -316,42 +294,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     list.addView(tvProjectStateTitle)
                     list.addView(tvProjectState)
 
-                    list.addView(tvMangTitle)
-                    list.addView(tvMang)
+                    list.addView(tvManagerTitle)
+                    list.addView(tvManager)
 
                     list.addView(tvTitleDeadline)
                     list.addView(tvDeadline)
 
                     list.addView(tvTeamTitle)
                     list.addView(tvProjectTeam)
-                    if(!manager) {
-                        list.addView(listTitle)
-                    }
-                    var (cvCard,bt_id) = createCard(workertester,projectlistall,user,list,bt_id,manager, name)
 
+                    list.addView(listTitle)
+
+                    val (cvCard,bt_id_out) = createCard(workerTester,projectListAll,user,list,btId,manager, name) // very important
+                    btId = bt_id_out
+                    //linear is main list
                     val blank = TextView(this)
-                    blank.width = 15
-                    //cvCard.
+                    blank.width = 15 //spacing
                     linear.gravity = Gravity.CENTER
                     linear.addView(cvCard)
-
                     linear.addView(blank)
-
-
-                        } else {
-
-                            println(document.data["workers"])
-                        }
-                    }
+                } else {
+                    println(document.data["workers"])
                 }
-//////////////////////////////////////////////////////////////////////////////////////
-
-
-        mBtMainLogout.setOnClickListener(this)
+            }//close of database search
+        }//close database
     }
     private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+        // Create the NotificationChannel, but only on API 26+ because of compatibility issues
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
@@ -399,81 +368,74 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val intent2 = Intent(this, LoginActivity::class.java)
                 // when touch the btn, get back
                 startActivity(intent2)
-                finish()
+                finish()//log out ends the activity with no data leakage
             }
             R.id.search_button -> {
-                var tv = findViewById<EditText>(R.id.SearchText)
-
-                var pos :String= intent.getStringExtra("position").toString()
-
+                val tv = findViewById<EditText>(R.id.SearchText)
+                val pos :String= intent.getStringExtra("position").toString()
                 val name = tv.text.toString().trim { it <= ' ' }
                 startActivity(Intent(this, MainActivity::class.java).putExtra("user", name).putExtra("position", pos))
-
+                //search button should be back able
             }
             R.id.bt_main_create_new_project -> {
                 //val intent3 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
 
-                var pos :String= intent.getStringExtra("position").toString()
-                var username :String= intent.getStringExtra("user").toString()
+                val pos :String= intent.getStringExtra("position").toString()
+                val username :String= intent.getStringExtra("user").toString()
                 startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managername", username).putExtra("managerPos", pos))
-
+                //starts the new project activity allowing for a back button
             }
 
             else ->{
-                var i:Int = view.id
-                val tv: TextView = findViewById(100+i)
-                val uv: TextView = findViewById(1000+i)
-                val pv: TextView = findViewById(2000+i)
+                //somebody must have clicked a button
+                val i:Int = view.id//0-99 should only be a button, from top to bottom in order
+                val tv: TextView = findViewById(100+i)//100-999 is the text view with the task name
+                //val uv: TextView = findViewById(1000+i)//1000-1999 is the user name, not needed unless manager gets access
+                val pv: TextView = findViewById(2000+i)//2000+ is the project name, this was invisible before
 
 
-                var name = pv.text.toString()
-                var fb = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $name")
+                val taskName = pv.text.toString()
+                val fb = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $taskName")//opens up the task
                     fb.get().addOnSuccessListener { document ->
                         if (document != null){
-                            var completeCheck = true
-                            val tasklist = document.get("task") as ArrayList<*>
-                            var statelist = document.get("state") as ArrayList<*>
-                            if (tasklist.size==1){
-                                fb.update("state", "[complete]")
-                                fb.update("project_state", "complete")
+                            var completeCheck = true // if all tasks are complete, then this remains true
+                            //lists
+                            val taskList = document.get("task") as ArrayList<*>
+                            val stateList = document.get("state") as ArrayList<*>
 
+                            if (taskList.size==1){//avoiding string weirdness of array of 1
+                                fb.update("state", "[complete]")//brackets are removed because it is normally a lis
+                                fb.update("project_state", "complete")//only one task so project must be complete
+                            }else { //no weirdness, proceed with normal things
+                                val myList = arrayListOf<String>()//this is the list that will be passed to the update function
 
-                            }else {
-                                var myList = arrayListOf<String>()
+                                for (j in 0..taskList.size - 1) {
 
-                                for (j in 0..tasklist.size - 1) {
-
-                                    if (tasklist[j].toString().contains(tv.text.toString())) {
+                                    if (taskList[j].toString().contains(tv.text.toString())) { // we found the task
                                         myList.add("complete")
                                     }else{
-                                        myList.add(statelist[j].toString())
-                                        if(!statelist[j].toString().contains("complete")){
+                                        myList.add(stateList[j].toString())
+                                        if(!stateList[j].toString().contains("complete")){//make sure that all tasks are complete
                                             completeCheck = false
                                         }
                                     }
                                 }
-                                fb.update("state", myList)
+                                fb.update("state", myList) //update with
                             }
                             if(completeCheck){
-                                fb.update("project_state", "complete")
+                                fb.update("project_state", "complete")//task is done
                             }
                         }else{
-                            println("document does not exist?")
+                            println("document does not exist?")//should never happen
                         }
-                        var pos :String= intent.getStringExtra("position").toString()
-                        var username :String= intent.getStringExtra("user").toString()
+                        //to update the data we need to remake the view
+                        val pos :String= intent.getStringExtra("position").toString()
+                        val username :String= intent.getStringExtra("user").toString()
                         startActivity(Intent(this, MainActivity::class.java).putExtra("user", username).putExtra("position", pos))
-
-
-
                     }
-
             }
-
-
         }
     }
-
 }
 
