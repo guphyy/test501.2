@@ -11,13 +11,13 @@
         android:id="@+id/bt_main_create_new_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
+        android:layout_marginStart="168dp"
         android:onClick="onClick"
         android:text="create new project"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.878" />
+        app:layout_constraintVertical_bias="0.9" />
 
     <Button
         android:id="@+id/bt_updateSomething"
@@ -26,6 +26,7 @@
         android:onClick="onClick"
         android:text="update"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bt_main_create_new_project"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9" />
