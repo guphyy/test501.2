@@ -107,113 +107,95 @@
 
                 android:id="@+id/rl_registeractivity_part2"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="332dp"
                 android:layout_marginTop="200dp">
 
                 <!-- 第二个部分，动态生成列表 -->
 
 
-                <LinearLayout
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="332dp">
 
-                    <TextView
-                        android:id="@+id/tv_registeractivity_task"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/add_here"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="task1 and workers：" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/project_list_group"
-                    android:layout_width="500dip"
-                    android:layout_height="500dip"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/et_registeractivity_task"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:hint="Please describe the task"
-                        android:inputType="text" />
-
-                    <EditText
-                        android:id="@+id/et_registeractivity_worker"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="0dp"
-                        android:gravity="center_vertical"
-                        android:hint="Please select a worker"
-                        android:inputType="text" />
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <EditText
-                        android:id="@+id/et_registeractivity_taskDdl"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="0dp"
-                        android:gravity="center_vertical"
-                        android:hint="Please enter deadline of task"
-                        android:inputType="text" />
-
-                    <EditText
-                        android:id="@+id/et_registeractivity_state"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="0dp"
-                        android:gravity="center_vertical"
-                        android:hint="the State"
-                        android:inputType="text"
-                        android:text="onGoing" />
-
-                    <Button
-                        android:id="@+id/bt_registeractivity_add"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/selector_loginactivity_button"
-                        android:onClick="onClick"
-                        android:text="ADD"
-                        android:textColor="#fff" />
-
-
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp">
-
-                        <LinearLayout
-                            android:id="@+id/add_here"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_registeractivity_task"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="task1 and workers：" />
+
+                        <EditText
+                            android:id="@+id/et_registeractivity_taskDdl"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
                             android:layout_marginTop="0dp"
-                            android:orientation="vertical"
-                            app:layout_constraintTop_toTopOf="parent">
+                            android:gravity="center_vertical"
+                            android:hint="Please enter deadline of task"
+                            android:inputType="text" />
 
-                        </LinearLayout>
-                    </ScrollView>
+                        <EditText
+                            android:id="@+id/et_registeractivity_task"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center_vertical"
+                            android:hint="Please describe the task"
+                            android:inputType="text" />
 
-                </LinearLayout>
+                        <EditText
+                            android:id="@+id/et_registeractivity_worker"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="0dp"
+                            android:gravity="center_vertical"
+                            android:hint="Please select a worker"
+                            android:inputType="text" />
+
+                        <EditText
+                            android:id="@+id/et_registeractivity_state"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="0dp"
+                            android:gravity="center_vertical"
+                            android:hint="the State"
+                            android:inputType="text"
+                            android:text="onGoing" />
+                    </LinearLayout>
+                </ScrollView>
 
 
             </RelativeLayout>
 
             <Button
+                android:id="@+id/bt_registeractivity_add"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/selector_loginactivity_button"
+                android:onClick="onClick"
+                android:text="Add Worker"
+                android:textColor="#fff" />
+
+            <Button
                 android:id="@+id/bt_registeractivity_register"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="62dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="0dp"
                 android:background="@drawable/selector_loginactivity_button"
                 android:onClick="onClick"
-                android:text="Sign up"
+                android:text="Register Project"
                 android:textColor="#fff" />
         </LinearLayout>
 

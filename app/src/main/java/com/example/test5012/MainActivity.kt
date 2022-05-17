@@ -128,17 +128,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ProjNameV.id = 2000 + bt_id_runner
                     bt_id_runner = bt_id_runner + 1
                     hlistV.addView(TaskV)
-
                     hlistV.addView(WorkerV)
-
-                    hlistV.addView(WorkerV)
-                    hlistV.addView(deadlineV)
-
-                    hlistV.addView(ProjNameV)
-                    if (!manager) {
-                        hlistV.addView(Button)
-                    }
                     list.addView(hlistV)
+                    var hlistV2 = LinearLayout(this)
+                    hlistV2.addView(StatusV)
+                    hlistV2.addView(deadlineV)
+                    hlistV2.addView(ProjNameV)
+                    if (!manager) {
+                        hlistV2.addView(Button)
+                    }
+                    list.addView(hlistV2)
                 }
 
             }
@@ -414,8 +413,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                 var myList = arrayListOf<String>()
 
                                 for (j in 0..tasklist.size - 1) {
-
-                                    if (tasklist[j].toString().contains(tv.text.toString())) {
+                                    var str = tv.text.toString()
+                                    var str2 = tasklist[j].toString()
+                                    if (str.contains(str2)) {
                                         myList.add("complete")
                                     }else{
                                         myList.add(statelist[j].toString())
