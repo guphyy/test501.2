@@ -1,16 +1,26 @@
 package com.example.test5012
 
+import android.app.NotificationChannel
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+//import android.support.v4.app.NotificationCompat
+//import android.support.v4.app.NotificationManagerCompat
+
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
 import com.google.firebase.firestore.FirebaseFirestore
+import android.app.NotificationManager as notificationManager
 
 
 data class Project(
@@ -20,7 +30,7 @@ data class Project(
     val deadline:String = "",
     val projectName:String = ""
 )
-
+var CHANNEL_ID = "msg"
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelperProject: DBOpenHelperProject? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +41,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         setContentView(R.layout.activity_main)
         initView(username,pos)
+        createNotificationChannel()
         mDBOpenHelperProject = DBOpenHelperProject(this)
     }
 
@@ -70,9 +81,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val WorkerV = TextView(this)
                     val ProjNameV = TextView(this)
 
-                    TaskV.text = tasklist[j].toString()
-                    StatusV.text = statelist[j].toString()
-                    WorkerV.text = workerlist[j].toString()
+
+                    var TaskVText = tasklist[j].toString()
+                    var StateText = statelist[j].toString()
+                    var WorkerVText = workerlist[j].toString()
+                    TaskV.text = "   Task: $TaskVText"
+                    StatusV.text = "   State: $StateText"
+                    if (StateText == "onGoing"){
+                        StatusV.setTextColor(Color.parseColor("#ff0000"))
+                    }
+
+                    WorkerV.text = "   Worker: $WorkerVText"
                     ProjNameV.text = projName
                     ProjNameV.isVisible = false
                     val Button = Button(this)
@@ -84,8 +103,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ProjNameV.id = 2000+bt_id_runner
                     bt_id_runner =bt_id_runner+ 1
                     hlistV.addView(TaskV)
-                    hlistV.addView(StatusV)
+
                     hlistV.addView(WorkerV)
+
+                    hlistV.addView(StatusV)
+
                     hlistV.addView(ProjNameV)
                     if (!manager ){
                         hlistV.addView(Button)
@@ -100,9 +122,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val TaskV = TextView(this)
                 val StatusV = TextView(this)
                 val WorkerV = TextView(this)
+
+
+
                 TaskV.text = (projectlistall["task"].toString()).drop(1).dropLast(1)
-                StatusV.text = (projectlistall["state"].toString()).drop(1).dropLast(1)
+                StatusV.text = (projectlistall["project_state"].toString()).drop(1).dropLast(1)
                 WorkerV.text = (projectlistall["worker"].toString()).drop(1).dropLast(1)
+                var taskDdl = projectlistall["taskDdl"].toString().drop(1).dropLast(1)
                 val Button = Button(this)
                 Button.id = bt_id_runner;
                 println("button id is : ${Button.id}")
@@ -118,13 +144,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 hlistV.addView(WorkerV)
                 if (!manager) {
                     hlistV.addView(Button)
+
                 }
                 list.addView(hlistV)
             }
         }
         val cvCard = CardView(this)
         cvCard.radius = 15f
-        cvCard.setCardBackgroundColor(Color.parseColor("#009688"))
+        cvCard.setCardBackgroundColor(Color.parseColor("#F5F5F5"))
         cvCard.setContentPadding(36,36,36,36)
         cvCard.cardElevation = 30f
 
@@ -133,14 +160,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initView(user: String, pos: String){
+
         val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
         val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
         newProj.isEnabled = false
+        newProj.isVisible = false
         var manager = false
         if (pos == "manager"){
             newProj.isEnabled = true
+            newProj.isVisible = true
             manager = true
-        }       // get the layout and event
+        }else{
+            showNotification(this)
+        }
+        // get the layout and event
 
         var linear = findViewById<LinearLayout>(R.id.fragment_bucket)
 
@@ -158,23 +191,44 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 if (testWorker(projectlistall,user)||manager) {
                     println(document.data)
+                    val tvTitleProjectName = TextView(this)
+                    tvTitleProjectName.text = "Project:"
+                    //tvTitleProjectName.textSize =18f
                     val tvProjectName = TextView(this)
-                    tvProjectName.text =  name
+                    tvProjectName.text =  "    $name"
+                    tvProjectName.textSize = 18f
+
+                    val tvTitleDeadline = TextView(this)
+                    tvTitleDeadline.text = "Deadline:"
+                    //tvTitleDeadline.textSize = 18f
                     val tvDeadline = TextView(this)
-                    tvDeadline.text =  projdeadline
+                    tvDeadline.text =  "     $projdeadline"
+                    tvDeadline.textSize = 18f
                     //NEED CODE FOR NUMBER OF WORKERS IN AN ARRAY
                     val tvMang = TextView(this)
                     tvMang.text =  user //REPLACE WITH MANAGER
+                    val listTitle = TextView(this)
+                    listTitle.text = "Task list:"
+                    listTitle.textSize = 18f
+
 
                     val list = LinearLayout(this)
                     list.orientation = VERTICAL
+                    list.addView(tvTitleProjectName)
                     list.addView(tvProjectName)
+                    list.addView(tvTitleDeadline)
                     list.addView(tvDeadline)
-                    list.addView(tvMang)
+                    list.addView(listTitle)
+                    //list.addView(tvMang)
                     var (cvCard,bt_id) = createCard(workertester,projectlistall,user,list,bt_id,manager, name)
 
-
+                    val blank = TextView(this)
+                    blank.width = 15
+                    //cvCard.
+                    linear.gravity = Gravity.CENTER
                     linear.addView(cvCard)
+
+                    linear.addView(blank)
 
 
                 }else{
@@ -191,7 +245,45 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         mBtMainLogout.setOnClickListener(this)
     }
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = notificationManager.IMPORTANCE_DEFAULT
+            val CHANNEL_ID = "msg"
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as notificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
 
+    }
+
+    private fun showNotification(view: MainActivity)
+    {
+        // CHANNEL_ID：通道ID，可在类 MainActivity 外自定义。如：val CHANNEL_ID = 'msg_1'
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("You have been assigned a task")
+            .setContentText("Please have a check!")
+            // 通知优先级，可以设置为int型，范围-2至2
+            .setPriority(NotificationCompat.PRIORITY_MAX )
+            .build()
+
+        // 显示通知
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(1, builder)
+
+        }
+
+    }
     override fun onStart() {
         super.onStart()
     }
@@ -219,6 +311,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.bt_updateSomething -> {
+
                 val projectName: String? = null
                 //this 'projectname' above needs to be replaced with the current project name in order to locate the target document
                 val updateTarget = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $projectName")
@@ -227,7 +320,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     .addOnSuccessListener { Log.d(TAG, " successfully updated!") }
                     .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
             }
-
 
 
             else ->{
@@ -279,6 +371,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                   //          .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
                 //MISSING UPDATE DATABASE
             }
+
 
         }
     }

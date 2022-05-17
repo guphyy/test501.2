@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_allBackground"
     tools:context=".MainActivity">
 
     <Button
@@ -37,7 +38,7 @@
         android:layout_marginBottom="4dp"
         android:onClick="onClick"
         android:text="log out"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/color_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 

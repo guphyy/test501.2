@@ -145,7 +145,7 @@
                     <EditText
                         android:id="@+id/et_registeractivity_worker"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="0dp"
                         android:gravity="center_vertical"
@@ -155,7 +155,7 @@
                     <EditText
                         android:id="@+id/et_registeractivity_taskDdl"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="0dp"
                         android:gravity="center_vertical"
@@ -165,17 +165,18 @@
                     <EditText
                         android:id="@+id/et_registeractivity_state"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="0dp"
                         android:gravity="center_vertical"
                         android:hint="the State"
                         android:inputType="text"
                         android:text="onGoing" />
+
                     <Button
                         android:id="@+id/bt_registeractivity_add"
                         android:layout_width="100dp"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/selector_loginactivity_button"
@@ -202,7 +203,6 @@
                 </LinearLayout>
 
 
-
             </RelativeLayout>
 
             <Button
@@ -210,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="0dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="0dp"
                 android:background="@drawable/selector_loginactivity_button"
                 android:onClick="onClick"
                 android:text="Sign up"
