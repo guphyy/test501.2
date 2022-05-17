@@ -1,5 +1,6 @@
 package com.example.test5012
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.content.Context
 import android.content.Intent
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         return booltest
     }
 
+    @SuppressLint("SetTextI18n")
     private fun createCard(
         workertester: String,
         projectlistall: Map<*, *>,
@@ -89,9 +91,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             var taskDdlList = projectlistall["taskDdl"] as ArrayList<*>
             for (j in 0..workerlist.size - 1) {
                 var b1 = workerlist[j].toString().contains(user)
-                var b2 = statelist[j].toString().contains("onGoing")
+                var b2 = statelist[j].toString() != null
                 var b3 = projectman.contains(user)
-                if ((!manager &&(b1 && b2)) || (manager)) {
+                if ((!manager &&(b1 && b2)) || (manager && b3)) {
                     val hlistV = LinearLayout(this)
                     val TaskV = TextView(this)
                     val StatusV = TextView(this)
@@ -110,6 +112,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     if (StateText == "onGoing"){
                         StatusV.setTextColor(Color.parseColor("#ff0000"))
                     }
+                    if (StateText == "complete"){
+                        StatusV.setTextColor(Color.parseColor("#7CFC00"))
+                    }
 
 
                     WorkerV.text = "   Worker: $WorkerVText"
@@ -120,6 +125,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ProjNameV.text = projName
                     ProjNameV.isVisible = false
                     val Button = Button(this)
+
                     Button.id = bt_id_runner;
                     //println("button id is : ${Button.id}")
                     Button.setOnClickListener(this)
@@ -128,22 +134,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ProjNameV.id = 2000 + bt_id_runner
                     bt_id_runner = bt_id_runner + 1
                     hlistV.addView(TaskV)
-
                     hlistV.addView(WorkerV)
+                   list.addView(hlistV)
 
-                    hlistV.addView(WorkerV)
-                    hlistV.addView(deadlineV)
-
-                    hlistV.addView(ProjNameV)
-                    if (!manager) {
-                        hlistV.addView(Button)
+                    var hlistV2 = LinearLayout(this)
+                    hlistV2.addView(StatusV)
+                    hlistV2.addView(deadlineV)
+                    hlistV2.addView(ProjNameV)
+                    if (((!manager) && (StateText=="onGoing"))) {
+                        hlistV2.addView(Button)
                     }
-                    list.addView(hlistV)
+                    list.addView(hlistV2)
                 }
 
             }
         } else {
-            if (projectlistall["state"].toString().contains("onGoing")||manager) {
+            if (projectlistall["state"] != null ||manager) {
                 val hlistV = LinearLayout(this)
                 val TaskV = TextView(this)
                 val StatusV = TextView(this)
@@ -151,13 +157,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val deadlineV = TextView(this)
 
                 val TaskVText = (projectlistall["task"].toString()).drop(1).dropLast(1)
-                val StateText = (projectlistall["state"].toString())
+                val StateText = (projectlistall["state"].toString()).drop(1).dropLast(1)
 
                 TaskV.text = "   Task: $TaskVText"
                 StatusV.text = "   State: $StateText"
                 if (StateText == "onGoing"){
                     StatusV.setTextColor(Color.parseColor("#ff0000"))
                 }
+                if (StateText == "complete"){
+                    StatusV.setTextColor(Color.parseColor("#7CFC00"))
+                }
+
 
                 var WorkerVText = (projectlistall["worker"].toString()).drop(1).dropLast(1)
                 WorkerV.text = "   Worker: $WorkerVText"
@@ -182,7 +192,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val hlistV2 = LinearLayout(this)
                 hlistV2.addView(deadlineV)
                 hlistV2.addView(ProjNameV)
-                if (!manager) {
+                if (!manager && StateText == "onGoing" ) {
                     Button.text = "Press when task is complete"
                     hlistV2.addView(Button)
 
@@ -206,12 +216,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val mBtMainLogout = findViewById<Button>(R.id.bt_main_logout)
         val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
+        val searchUser = findViewById<Button>(R.id.search_button)
+        val searchText = findViewById<TextView>(R.id.SearchText)
+
+
         newProj.isEnabled = false
         newProj.isVisible = false
         var manager = false
+
+        searchUser.isVisible = false
+        searchText.isVisible = false
+
         if (pos == "manager"){
             newProj.isEnabled = true
             newProj.isVisible = true
+            searchUser.isVisible = true
+            searchText.isVisible = true
+            searchUser.setOnClickListener(this)
+
+
             manager = true
         }else{
             showNotification(this)
@@ -301,7 +324,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     list.addView(tvTeamTitle)
                     list.addView(tvProjectTeam)
-                    if((!manager)&&(!projstate.contains("complete"))) {
+                    if(!manager) {
                         list.addView(listTitle)
                     }
                     var (cvCard,bt_id) = createCard(workertester,projectlistall,user,list,bt_id,manager, name)
@@ -378,17 +401,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent2)
                 finish()
             }
+            R.id.search_button -> {
+                var tv = findViewById<EditText>(R.id.SearchText)
+
+                var pos :String= intent.getStringExtra("position").toString()
+
+                val name = tv.text.toString().trim { it <= ' ' }
+                startActivity(Intent(this, MainActivity::class.java).putExtra("user", name).putExtra("position", pos))
+
+            }
             R.id.bt_main_create_new_project -> {
                 //val intent3 = Intent(this, RegisterActivityProject::class.java)
                 // when touch the btn, go to create new project page
+
                 var pos :String= intent.getStringExtra("position").toString()
                 var username :String= intent.getStringExtra("user").toString()
                 startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managername", username).putExtra("managerPos", pos))
 
-               // startActivity(Intent(this, RegisterActivityProject::class.java).putExtra("managerpos", pos).putExtra("managerPos", pos))
-
-                //here to sent out the userName
-                finish()
             }
 
             else ->{
@@ -406,7 +435,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             val tasklist = document.get("task") as ArrayList<*>
                             var statelist = document.get("state") as ArrayList<*>
                             if (tasklist.size==1){
-                                fb.update("state", "complete")
+                                fb.update("state", "[complete]")
                                 fb.update("project_state", "complete")
 
 
