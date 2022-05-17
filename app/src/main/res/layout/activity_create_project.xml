@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".RegisterActivityProject"
         android:background="#eeeeee"
-        >
+        tools:context=".RegisterActivityProject">
 
         <RelativeLayout
             android:id="@+id/rl_registeractivity_top"
@@ -39,84 +39,56 @@
                 android:textSize="20dp" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_registeractivity_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/rl_registeractivity_top"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            >
-            <!-- 第一个文本编辑框  输入用户名 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_registeractivity_projectname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:text="Project name"/>
-
-            </LinearLayout>
-            <!-- 第1个文本编辑框  输入名字 -->
-            <EditText
-                android:id="@+id/et_registeractivity_projectname"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:hint="Please enter project username"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_registeractivity_deadline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Deadline："/>
-
-            </LinearLayout>
-            <!-- 第2个文本编辑框  输入DDL -->
-            <EditText
-                android:id="@+id/et_registeractivity_deadline"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:hint="Please enter the Deadline"
-
-                android:inputType="text" />
-
-
-
-        </LinearLayout>
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="45dp"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/ll_registeractivity_body"
 
-            <RelativeLayout
-
-                android:id="@+id/rl_registeractivity_part2"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_marginTop="200dp">
-
-                <!-- 第二个部分，动态生成列表 -->
-
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_registeractivity_projectname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Project name" />
+
+                    <EditText
+                        android:id="@+id/et_registeractivity_projectname"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="Please enter project username" />
+
+                    <TextView
+                        android:id="@+id/tv_registeractivity_deadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Deadline：" />
+
+                    <EditText
+                        android:id="@+id/et_registeractivity_deadline"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="Please enter the Deadline"
+                        android:inputType="text" />
+
 
                     <TextView
                         android:id="@+id/tv_registeractivity_task"
@@ -124,23 +96,6 @@
                         android:layout_height="wrap_content"
                         android:text="task1 and workers：" />
 
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/project_list_group"
-                    android:layout_width="500dip"
-                    android:layout_height="500dip"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/et_registeractivity_task"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:hint="Please describe the task"
-                        android:inputType="text" />
 
                     <EditText
                         android:id="@+id/et_registeractivity_worker"
@@ -174,6 +129,15 @@
                         android:inputType="text" />
 
                     <EditText
+                        android:id="@+id/et_registeractivity_task"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="Please describe the task"
+                        android:inputType="text" />
+
+                    <EditText
                         android:id="@+id/et_registeractivity_state"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -195,38 +159,31 @@
                         android:text="ADD"
                         android:textColor="#fff" />
 
-
-                    <ScrollView
+                    <LinearLayout
+                        android:id="@+id/add_here"
                         android:layout_width="match_parent"
-                        android:layout_height="250dp">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <LinearLayout
-                            android:id="@+id/add_here"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="0dp"
-                            android:orientation="vertical"
-                            app:layout_constraintTop_toTopOf="parent">
+                    </LinearLayout>
 
-                        </LinearLayout>
-                    </ScrollView>
-
+                    <Button
+                        android:id="@+id/bt_registeractivity_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="100dp"
+                        android:background="@drawable/selector_loginactivity_button"
+                        android:onClick="onClick"
+                        android:text="Sign up"
+                        android:textColor="#fff" />
                 </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
 
-            </RelativeLayout>
-
-            <Button
-                android:id="@+id/bt_registeractivity_register"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="0dp"
-                android:background="@drawable/selector_loginactivity_button"
-                android:onClick="onClick"
-                android:text="Sign up"
-                android:textColor="#fff" />
-        </LinearLayout>
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

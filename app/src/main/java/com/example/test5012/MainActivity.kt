@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     hlistV.addView(WorkerV)
 
-                    hlistV.addView(WorkerV)
+                    //hlistV.addView(WorkerV)
                     hlistV.addView(deadlineV)
 
                     hlistV.addView(ProjNameV)
