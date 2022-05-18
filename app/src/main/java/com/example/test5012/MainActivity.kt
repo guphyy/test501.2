@@ -416,6 +416,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             //lists
                             val taskList = document.get("task") as ArrayList<*>
                             val stateList = document.get("state") as ArrayList<*>
+                            println("Button $i pressed, checking for task ${tv.text.toString()}")
 
                             if (taskList.size==1){//avoiding string weirdness of array of 1
                                 fb.update("state", "[complete]")//brackets are removed because it is normally a lis
@@ -424,8 +425,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                 val myList = arrayListOf<String>()//this is the list that will be passed to the update function
 
                                 for (j in 0..taskList.size - 1) {
-
-                                    if (taskList[j].toString().contains(tv.text.toString())) { // we found the task
+                                    println("testing ${taskList[j].toString()}")
+                                    if (tv.text.toString().contains(taskList[j].toString())) { // we found the task
                                         myList.add("complete")
                                     }else{
                                         myList.add(stateList[j].toString())
