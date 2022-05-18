@@ -65,7 +65,6 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
         mEtRegisterActivityTaskDeadline = findViewById(R.id.et_registeractivity_taskDdl)
         mEtRegisterActivityWorker = findViewById(R.id.et_registeractivity_worker)
         mEtRegisterActivityWorkerEmail = findViewById(R.id.et_registeractivity_worker_email)
-        mEtRegisterActivityState = findViewById(R.id.et_registeractivity_state)
         mEtRegisterActivityTaskAdd = findViewById(R.id.task_add)
         mEtRegisterActivityWorkerAdd = findViewById(R.id.worker_add)
         mEtRegisterActivityStateAdd = findViewById(R.id.status_add)
@@ -108,10 +107,10 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val worker = mEtRegisterActivityWorker!!.text.toString().trim() { it <= ' ' }
                 val email = mEtRegisterActivityWorkerEmail!!.text.toString().trim() {it <= ' '}
                 val taskDeadline = mEtRegisterActivityTaskDeadline!!.text.toString().trim() { it <= ' ' }
-                val state = mEtRegisterActivityState!!.text.toString().trim() { it <= ' ' }
+                val state = "incomplete"
                 val managerName = intent.getStringExtra("managername").toString()
                 println(managerName)
-                val projectState = "onGoing"
+                val projectState = "registered"
                 workerList.add(worker)
                 taskList.add(task)
                 stateList.add(state)
@@ -203,16 +202,16 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 registerDDL.tag = temp
                 registerDDL.id = R.id.taskDdl_add
 
-
+                /*
                 val registerState = EditText(this)
                 //registerState.hint = "Status"
                 registerState.setText("onGoing")
                 registerState.width = 1000
                 registerState.tag = temp
                 registerState.id = R.id.status_add
-
+                */
                 val addNewTaskBtn = Button(this)
-                addNewTaskBtn.text = "confirm"
+                addNewTaskBtn.text = "confirm task"
                 addNewTaskBtn.width = 250
 
                 addNewTaskBtn.setOnClickListener {
@@ -221,7 +220,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     val taskAdd = registerTask.text.toString().trim() { it <= ' ' }
                     val workerAdd = registerWorker.text.toString().trim() { it <= ' ' }
                     val emailAdd = registerWorkerEmail.text.toString().trim() { it <= ' ' }
-                    val stateAdd = registerState.text.toString().trim() { it <= ' ' }
+                    val stateAdd = "incomplete"
                     val ddlOftasks = registerDDL.text.toString().trim() {it <= ' '}
                     workerList.add(workerAdd)
                     emailList.add(emailAdd)
@@ -251,7 +250,6 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 myFlowLayout.addView(registerWorker)
                 myFlowLayout.addView(registerWorkerEmail)
                 myFlowLayout.addView(registerDDL)
-                myFlowLayout.addView(registerState)
                 myFlowLayout.addView(addNewTaskBtn)
 
 

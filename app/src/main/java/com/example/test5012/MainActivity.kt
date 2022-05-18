@@ -47,16 +47,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun testWorker(map: Map<*, *>, user: String): Boolean {//simple checker if worker exists in map
         val tester = map["worker"].toString()
         var boolTest = false
-        if (tester.contains(",")) {
+        if (tester.contains(",")) { //maybe fix comma
             val workerList = map["worker"] as ArrayList<*>
             for (i in 0 until workerList.size) {
-                if (workerList[i].toString().contains(user)) {
+                if (workerList[i].toString() == user) {
                     boolTest = true
                     break
                 }
             }
         } else {
-            boolTest = tester.contains(user)
+            boolTest = tester == user
         }
         return boolTest
     }
@@ -69,7 +69,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         list: LinearLayout,
         bt_id: Int,
         manager: Boolean,
-        projName: String
+        projName: String,
+        cardColorBool: Boolean
     ): Pair<CardView, Int> {
         var btIdRunner = bt_id
         if (workerTester.contains(",")) {
@@ -79,8 +80,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val projectManager = projectListAll["submit_by"].toString()
             val taskDdlList = projectListAll["taskDdl"] as ArrayList<*>
             for (j in 0 until workerList.size) {
-                val b1 = workerList[j].toString().contains(user)
-                val b2 = projectManager.contains(user)
+                val b1 = workerList[j].toString() == user
+                val b2 = projectManager == user
                 if ((!manager && b1) || (manager && b2)) {
                     //set up views
                     val horizontalListView = LinearLayout(this)
@@ -99,11 +100,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     //make text
                     taskView.text = "   Task: $taskViewText"
                     statusView.text = "   State: $stateText"
-                    if (stateText == "onGoing"){
+                    if (stateText == "onGoing" || stateText == "incomplete" || stateText == "registered"){
                         statusView.setTextColor(Color.parseColor("#ff0000"))
                     }
                     if (stateText == "complete"){
-                        statusView.setTextColor(Color.parseColor("#7CFC00"))
+                        statusView.setTextColor(Color.parseColor("#738b28"))
                     }
                     workerView.text = "   Worker: $workerViewText"
                     deadlineV.text = "   Due by: $taskDeadline"
@@ -124,7 +125,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     horizontalListView2.addView(statusView)
                     horizontalListView2.addView(deadlineV)
                     horizontalListView2.addView(projNameView)
-                    if (((!manager) && (stateText=="onGoing"))) {
+                    if (((!manager) && (stateText == "onGoing" || stateText == "incomplete" || stateText == "registered"))) {
                         button.text = "Press when task is complete"
                         horizontalListView2.addView(button)
                     }
@@ -156,11 +157,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 deadlineV.text = "   Due by: $taskDeadline"
                 projNameView.text = projName //invisible to make onClick simpler
                 projNameView.isVisible = false
-                if (stateText == "onGoing"){
+                if (stateText == "onGoing" || stateText == "incomplete" || stateText == "registered"){
                     statusView.setTextColor(Color.parseColor("#ff0000"))
                 }
                 if (stateText == "complete"){
-                    statusView.setTextColor(Color.parseColor("#7CFC00"))
+                    statusView.setTextColor(Color.parseColor("#738b28"))
                 }
                 button.setOnClickListener(this)
                 //setting ids for callback
@@ -176,7 +177,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 horizontalListView2.addView(statusView)
                 horizontalListView2.addView(deadlineV)
                 horizontalListView2.addView(projNameView)
-                if (!manager && stateText == "onGoing" ) {
+                if (!manager && (stateText == "onGoing"||stateText == "incomplete"||stateText == "registered" ) ) {
                     button.text = "Press when task is complete"
                     horizontalListView2.addView(button)
                 }
@@ -185,8 +186,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         val cvCard = CardView(this)
         cvCard.radius = 45f
-
         cvCard.setCardBackgroundColor(Color.parseColor("#FFEFD5"))
+        if (cardColorBool){
+        cvCard.setCardBackgroundColor(Color.parseColor("#dae8af"))
+        }
         cvCard.setContentPadding(36,36,36,50)
         cvCard.cardElevation = 30f
 
@@ -203,14 +206,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val newProj = findViewById<Button>(R.id.bt_main_create_new_project)
         val searchUser = findViewById<Button>(R.id.search_button)
         val searchText = findViewById<TextView>(R.id.SearchText)
-
+        val workerName = findViewById<TextView>(R.id.worker_name)
         //user dependant setup
         newProj.isEnabled = false
         newProj.isVisible = false
         var manager = false
         searchUser.isVisible = false
         searchText.isVisible = false
+        workerName.text = "Logged in as $user"
+        workerName.textSize = 30f
+        workerName.isVisible = true
         if (pos == "manager"){
+            workerName.isVisible = false
             newProj.isEnabled = true
             newProj.isVisible = true
             searchUser.isVisible = true
@@ -241,7 +248,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val projectState = projectListAll["project_state"].toString()
                     val managerName = projectListAll["submit_by"].toString()
 
-                    if (testWorker(projectListAll, user) || manager && managerName.contains(user)) {
+                    if (testWorker(projectListAll, user) || manager && managerName == user) {
                         println(document.data)
                         //Title for the Project, appears first
                         val tvTitleProjectName = TextView(this)
@@ -308,14 +315,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         list.addView(tvProjectTeam)
 
                         list.addView(listTitle)
-
+                        var complete: Boolean = tvProjectState.text.toString().contains("incomplete") || tvProjectState.text.toString().contains("registered")
                         val (cvCard, bt_id_out) = createCard(workerTester,
                             projectListAll,
                             user,
                             list,
                             btId,
                             manager,
-                            name) // very important
+                            name,
+                            !complete) // very important
                         btId = bt_id_out
                         //linear is main list
                         val blank = TextView(this)
@@ -327,7 +335,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         println(document.data["workers"])
                     }
                 }else{
-
+                    println("document does not exist?")
                 }
             }//close of database search
         }//close database
@@ -430,7 +438,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                         myList.add("complete")
                                     }else{
                                         myList.add(stateList[j].toString())
-                                        if(!stateList[j].toString().contains("complete")){//make sure that all tasks are complete
+                                        if(stateList[j].toString() == "incomplete"){//make sure that all tasks are complete
                                             completeCheck = false
                                         }
                                     }

@@ -16,7 +16,7 @@
             android:id="@+id/rl_registeractivity_top"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@color/color_minefragment_top">
+            android:background="@color/color_btn">
 
             <ImageView
                 android:id="@+id/iv_registeractivity_back"
@@ -156,6 +156,7 @@
                     android:layout_width="158dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:buttonTint="@color/color_btn"
                     android:checked="true"
                     android:minHeight="48dp"
                     android:text="Worker" />
@@ -165,6 +166,7 @@
                     android:layout_width="158dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:buttonTint="@color/color_btn"
                     android:checked="false"
                     android:minHeight="48dp"
                     android:text="Manager" />
@@ -187,7 +189,7 @@
                 android:background="@drawable/selector_loginactivity_button"
                 android:onClick="onClick"
                 android:text="Sign up"
-                android:textColor="#fff" />
+                android:textColor="#000000" />
         </RelativeLayout>
 
     </RelativeLayout>

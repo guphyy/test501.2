@@ -15,7 +15,7 @@
             android:id="@+id/rl_registeractivity_top"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/color_minefragment_top">
+            android:background="@color/color_btn">
 
             <ImageView
                 android:id="@+id/iv_registeractivity_back"
@@ -35,30 +35,30 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/iv_registeractivity_back"
                 android:text="Registration page"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:textSize="20dp" />
         </RelativeLayout>
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="45dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ll_registeractivity_body"
-
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
+                android:layout_height="425dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginBottom="0dp"
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/add_here"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/tv_registeractivity_projectname"
@@ -89,13 +89,11 @@
                         android:hint="Please enter the Deadline"
                         android:inputType="text" />
 
-
                     <TextView
                         android:id="@+id/tv_registeractivity_task"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="task1 and workers：" />
-
 
                     <EditText
                         android:id="@+id/et_registeractivity_worker"
@@ -117,6 +115,14 @@
                         android:hint="Please enter email of worker"
                         android:inputType="text" />
 
+                    <EditText
+                        android:id="@+id/et_registeractivity_task"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:hint="Please describe the task"
+                        android:inputType="text" />
 
                     <EditText
                         android:id="@+id/et_registeractivity_taskDdl"
@@ -128,61 +134,32 @@
                         android:hint="Please enter deadline of task"
                         android:inputType="text" />
 
-                    <EditText
-                        android:id="@+id/et_registeractivity_task"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:hint="Please describe the task"
-                        android:inputType="text" />
-
-                    <EditText
-                        android:id="@+id/et_registeractivity_state"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="0dp"
-                        android:gravity="center_vertical"
-                        android:hint="the State"
-                        android:inputType="text"
-                        android:text="onGoing" />
-
-                    <Button
-                        android:id="@+id/bt_registeractivity_add"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/selector_loginactivity_button"
-                        android:onClick="onClick"
-                        android:text="ADD"
-                        android:textColor="#fff" />
-
-                    <LinearLayout
-                        android:id="@+id/add_here"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:orientation="vertical"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/bt_registeractivity_register"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginTop="100dp"
-                        android:background="@drawable/selector_loginactivity_button"
-                        android:onClick="onClick"
-                        android:text="Sign up"
-                        android:textColor="#fff" />
                 </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+            </ScrollView>
 
+            <Button
+                android:id="@+id/bt_registeractivity_add"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/selector_loginactivity_button"
+                android:onClick="onClick"
+                android:text="Add new task to project"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/bt_registeractivity_register"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="60dp"
+                android:background="@drawable/selector_loginactivity_button"
+                android:onClick="onClick"
+                android:text="Sign up"
+                android:textColor="#000000" />
+        </LinearLayout>
 
 
     </RelativeLayout>
