@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             }
-        } else {//if only one string is in array things get weird for some reason, cant get [0] as string so we have to "cheat"
+        } else {
             if (projectListAll["state"] != null ||manager) {
                 //make views
                 val horizontalListView = LinearLayout(this)
@@ -227,94 +227,107 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val fb = FirebaseUtils().fireStoreDatabase.collection("projects")
         fb.get().addOnSuccessListener { querySnapshot ->
             querySnapshot.forEach { document ->
-                Log.d(TAG, "Read document with ID ${document.id}")
-                //Document has been read get data as MAP of String String
-                //note if there is only one string weirdness occurs
-                val projectListAll = document.data as Map<*,*>//cant be String,String because of weirdness
-                val workerTester = projectListAll["worker"].toString().drop(1).dropLast(1)//Gets the list of Workers without []
-                val name = projectListAll["projectName"].toString()
-                val projectDeadline = projectListAll["deadline"].toString()
-                val projectState = projectListAll["project_state"].toString()
-                val managerName = projectListAll["submit_by"].toString()
+                if(document.exists()) {
+                    Log.d(TAG, "Read document with ID ${document.id}")
+                    //Document has been read get data as MAP of String String
+                    //note if there is only one string weirdness occurs
 
-                if (testWorker(projectListAll,user)||manager&&managerName.contains(user)) {
-                    println(document.data)
-                    //Title for the Project, appears first
-                    val tvTitleProjectName = TextView(this)
-                    tvTitleProjectName.text = "Project:"
-                    tvTitleProjectName.textSize =22f
-                    //The actual name of the project
-                    val tvProjectName = TextView(this)
-                    tvProjectName.text =  "    $name"
-                    tvProjectName.textSize = 22f
-                    //Title for the State of the project
-                    val tvProjectStateTitle = TextView(this)
-                    tvProjectStateTitle.text =  "Project State"
-                    tvProjectStateTitle.textSize = 18f
-                    //you get the point
-                    val tvProjectState = TextView(this)
-                    tvProjectState.text =  "    $projectState"
-                    tvProjectState.textSize = 18f
+                    val projectListAll =
+                        document.data as Map<*, *>//cant be String,String because of weirdness
+                    val workerTester = projectListAll["worker"].toString().drop(1)
+                        .dropLast(1)//Gets the list of Workers without []
+                    val name = projectListAll["projectName"].toString()
+                    val projectDeadline = projectListAll["deadline"].toString()
+                    val projectState = projectListAll["project_state"].toString()
+                    val managerName = projectListAll["submit_by"].toString()
 
-                    val tvTitleDeadline = TextView(this)
-                    tvTitleDeadline.text = "Deadline:"
-                    tvTitleDeadline.textSize = 18f
+                    if (testWorker(projectListAll, user) || manager && managerName.contains(user)) {
+                        println(document.data)
+                        //Title for the Project, appears first
+                        val tvTitleProjectName = TextView(this)
+                        tvTitleProjectName.text = "Project:"
+                        tvTitleProjectName.textSize = 22f
+                        //The actual name of the project
+                        val tvProjectName = TextView(this)
+                        tvProjectName.text = "    $name"
+                        tvProjectName.textSize = 22f
+                        //Title for the State of the project
+                        val tvProjectStateTitle = TextView(this)
+                        tvProjectStateTitle.text = "Project State"
+                        tvProjectStateTitle.textSize = 18f
+                        //you get the point
+                        val tvProjectState = TextView(this)
+                        tvProjectState.text = "    $projectState"
+                        tvProjectState.textSize = 18f
 
-                    //tvTitleDeadline.textSize = 18f
-                    val tvDeadline = TextView(this)
-                    tvDeadline.text =  "     $projectDeadline"
-                    tvDeadline.textSize = 18f
+                        val tvTitleDeadline = TextView(this)
+                        tvTitleDeadline.text = "Deadline:"
+                        tvTitleDeadline.textSize = 18f
 
-                    val tvTeamTitle = TextView(this)
-                    tvTeamTitle.text =  "Team members"
-                    tvTeamTitle.textSize = 18f
+                        //tvTitleDeadline.textSize = 18f
+                        val tvDeadline = TextView(this)
+                        tvDeadline.text = "     $projectDeadline"
+                        tvDeadline.textSize = 18f
 
-                    val tvProjectTeam = TextView(this)
-                    tvProjectTeam.text =  "    $workerTester"
-                    tvProjectTeam.textSize = 18f
+                        val tvTeamTitle = TextView(this)
+                        tvTeamTitle.text = "Team members"
+                        tvTeamTitle.textSize = 18f
 
-                    val tvManagerTitle = TextView(this)
-                    tvManagerTitle.text =  "manager: "
-                    tvManagerTitle.textSize = 18f
+                        val tvProjectTeam = TextView(this)
+                        tvProjectTeam.text = "    $workerTester"
+                        tvProjectTeam.textSize = 18f
 
-                    val tvManager = TextView(this)
-                    tvManager.text =  "    $managerName"
-                    tvManager.textSize = 18f
+                        val tvManagerTitle = TextView(this)
+                        tvManagerTitle.text = "manager: "
+                        tvManagerTitle.textSize = 18f
 
-                    val listTitle = TextView(this)
-                    listTitle.text = "Task list:"
-                    listTitle.textSize = 18f
+                        val tvManager = TextView(this)
+                        tvManager.text = "    $managerName"
+                        tvManager.textSize = 18f
 
-                    //Create List for the card, this has no loops so kept outside of card
-                    val list = LinearLayout(this)
-                    list.orientation = VERTICAL
-                    list.addView(tvTitleProjectName)
-                    list.addView(tvProjectName)
+                        val listTitle = TextView(this)
+                        listTitle.text = "Task list:"
+                        listTitle.textSize = 18f
 
-                    list.addView(tvProjectStateTitle)
-                    list.addView(tvProjectState)
+                        //Create List for the card, this has no loops so kept outside of card
+                        val list = LinearLayout(this)
+                        list.orientation = VERTICAL
+                        list.addView(tvTitleProjectName)
+                        list.addView(tvProjectName)
 
-                    list.addView(tvManagerTitle)
-                    list.addView(tvManager)
+                        list.addView(tvProjectStateTitle)
+                        list.addView(tvProjectState)
 
-                    list.addView(tvTitleDeadline)
-                    list.addView(tvDeadline)
+                        list.addView(tvManagerTitle)
+                        list.addView(tvManager)
 
-                    list.addView(tvTeamTitle)
-                    list.addView(tvProjectTeam)
+                        list.addView(tvTitleDeadline)
+                        list.addView(tvDeadline)
 
-                    list.addView(listTitle)
+                        list.addView(tvTeamTitle)
+                        list.addView(tvProjectTeam)
 
-                    val (cvCard,bt_id_out) = createCard(workerTester,projectListAll,user,list,btId,manager, name) // very important
-                    btId = bt_id_out
-                    //linear is main list
-                    val blank = TextView(this)
-                    blank.width = 15 //spacing
-                    linear.gravity = Gravity.CENTER
-                    linear.addView(cvCard)
-                    linear.addView(blank)
-                } else {
-                    println(document.data["workers"])
+                        list.addView(listTitle)
+
+                        val (cvCard, bt_id_out) = createCard(workerTester,
+                            projectListAll,
+                            user,
+                            list,
+                            btId,
+                            manager,
+                            name) // very important
+                        btId = bt_id_out
+                        //linear is main list
+                        val blank = TextView(this)
+                        blank.width = 15 //spacing
+                        linear.gravity = Gravity.CENTER
+                        linear.addView(cvCard)
+                        linear.addView(blank)
+                    } else {
+                        println(document.data["workers"])
+                    }
+                }else{
+
                 }
             }//close of database search
         }//close database

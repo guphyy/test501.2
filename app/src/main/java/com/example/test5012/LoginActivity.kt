@@ -46,6 +46,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mEtLoginactivityUsername = myLoginActivity.etLoginactivityUsername
         mEtLoginactivityPassword = myLoginActivity.etLoginactivityPassword
         mLlLoginactivityTwo = myLoginActivity.llLoginactivityTwo
+
         // get all the components
         mBtLoginactivityLogin!!.setOnClickListener(this)
         mTvLoginactivityRegister!!.setOnClickListener(this)
@@ -81,6 +82,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         val posistion :String = data[i].getIdentity()!!
                         intent.putExtra("user",username)
                         intent.putExtra("position",posistion)
+                        intent
                         startActivity(intent)
                         finish() //销毁此Activity
                     } else {

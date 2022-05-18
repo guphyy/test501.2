@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
 import kotlin.reflect.typeOf
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.Date
+import java.util.*
+
 
 const val TAG = "FIRESTORE"
 var workerList = arrayListOf<String>()
@@ -19,6 +22,7 @@ var taskList = arrayListOf<String>()
 var stateList = arrayListOf<String>()
 var ddlList = arrayListOf<String>()
 var emailList = arrayListOf<String>()
+var valueList = arrayListOf<Int>()
 
 
 class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
@@ -71,6 +75,14 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
 
 
 
+    }
+    private fun dateSort(dateList: ArrayList<String?>, newDate: String){
+        var newPair = newDate.split("/")
+        var newD = newPair[0].toInt()
+        var newM = newPair[1].toInt()
+        var value = 31*newM + newD
+        valueList.add(value)
+        valueList.sort()
     }
 
     @SuppressLint("NonConstantResourceId", "WrongViewCast")
@@ -216,6 +228,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     taskList.add(taskAdd)
                     stateList.add(stateAdd)
                     ddlList.add(ddlOftasks)
+                    //sentEmailTo(emailAdd, workerAdd)
                     if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(
                             taskAdd
                         ) && !TextUtils.isEmpty(workerAdd) && !TextUtils.isEmpty(stateAdd)
