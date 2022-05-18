@@ -186,12 +186,18 @@
 
 
 
+<<<<<<< Updated upstream
 
                     <ScrollView
+=======
+                    <LinearLayout
+                        android:id="@+id/add_here"
+>>>>>>> Stashed changes
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
+<<<<<<< Updated upstream
                         <LinearLayout
                             android:id="@+id/add_here"
                             android:layout_width="match_parent"
@@ -202,6 +208,19 @@
 
                         </LinearLayout>
                     </ScrollView>
+=======
+                    </LinearLayout>
+                    <Button
+                        android:id="@+id/bt_registeractivity_add"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/selector_loginactivity_button"
+                        android:onClick="onClick"
+                        android:text="ADD"
+                        android:textColor="#fff" />
+>>>>>>> Stashed changes
 
                 </LinearLayout>
 
