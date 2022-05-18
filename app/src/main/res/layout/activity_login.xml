@@ -25,10 +25,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@id/tv_loginactivity_register"
-                android:layout_marginEnd="300dp"
                 android:layout_marginTop="21dp"
+                android:layout_marginEnd="300dp"
                 android:layout_marginBottom="22dp"
+                android:layout_toLeftOf="@id/tv_loginactivity_register"
 
                 android:text="Login Page"
                 android:textColor="#fff"
@@ -42,13 +42,14 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="21dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="22dp"
                 android:clickable="true"
                 android:onClick="onClick"
                 android:text="Sign Up"
                 android:textColor="#fff"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                tools:ignore="TouchTargetSizeCheck" />
         </RelativeLayout>
 
         <LinearLayout
@@ -65,16 +66,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_loginactivity_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User Name："/>
+                    android:text="User Name："
+                    android:textColor="#616161" />
+
                 <EditText
                     android:id="@+id/et_loginactivity_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="User Name"/>
+                    android:hint="User Name"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,12 +90,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Password："/>
+
                 <EditText
                     android:id="@+id/et_loginactivity_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Your Password"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
         </LinearLayout>
 
