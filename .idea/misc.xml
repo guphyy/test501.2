@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../layout/custom_preview.xml" value="0.17056354916067146" />
+        <entry key="..\:/Users/jdwk1/Desktop/github-App/test501.2/app/src/main/res/drawable/ic_add.xml" value="0.1205" />
+        <entry key="..\:/Users/jdwk1/Desktop/github-App/test501.2/app/src/main/res/layout/activity_create_project.xml" value="0.14285714285714285" />
+        <entry key="..\:/Users/jdwk1/Desktop/github-App/test501.2/app/src/main/res/layout/activity_login.xml" value="0.5714285714285714" />
+        <entry key="..\:/Users/jdwk1/Desktop/github-App/test501.2/app/src/main/res/layout/activity_main.xml" value="0.2857142857142857" />
+        <entry key="..\:/Users/jdwk1/Desktop/github-App/test501.2/app/src/main/res/layout/activity_register.xml" value="0.20364583333333333" />
+        <entry key="..\:/Users/jdwk1/Desktop/github-App/test501.2/app/src/main/res/layout/fragment_main_veiw.xml" value="0.20364583333333333" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/drawable/add_new_activity_Btn.xml" value="0.143" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/drawable/add_new_activity_btn.xml" value="0.1" />
@@ -11,22 +16,19 @@
         <entry key="..\:/androidfile/test5012/app/src/main/res/drawable/boder_one.xml" value="0.1" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/drawable/selector_loginactivity_button.xml" value="0.1" />
-        <entry key="..\:/androidfile/test5012/app/src/main/res/layout/activity_create_project.xml" value="0.1" />
+        <entry key="..\:/androidfile/test5012/app/src/main/res/layout/activity_create_project.xml" value="0.2" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/layout/activity_main.xml" value="0.152" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/layout/fragment_main_veiw.xml" value="0.264" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/layout/image_update.xml" value="0.2526041666666667" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/layout/mytest.xml" value="0.20677083333333332" />
-        <entry key="..\:/androidfile/test5012/app/src/main/res/layout/newproject.xml" value="0.264" />
         <entry key="..\:/androidfile/test5012/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/androidfile/testFromGit/test509/app/src/main/res/layout/activity_create_project.xml" value="0.2" />
         <entry key="..\:/androidfile/testFromGit/test509/app/src/main/res/layout/activity_login.xml" value="0.24947916666666667" />
         <entry key="..\:/androidfile/testFromGit/test509/app/src/main/res/layout/activity_register.xml" value="0.264" />
-        <entry key="app/src/main/res/drawable/selector_loginactivity_button.xml" value="0.19" />
-        <entry key="app/src/main/res/layout/activity_create_project.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.1983695652173913" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_create_project.xml" value="0.18009118541033434" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.12047101449275362" />
         <entry key="app/src/main/res/layout/fragment_main_veiw.xml" value="0.16847826086956522" />
       </map>

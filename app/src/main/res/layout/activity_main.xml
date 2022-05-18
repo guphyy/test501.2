@@ -11,10 +11,11 @@
         android:id="@+id/bt_main_create_new_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
         android:onClick="onClick"
-        android:text="create new project"
+        android:text="new project"
+        app:icon="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.878"
@@ -30,15 +31,17 @@
         android:text="log out"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
         android:layout_height="450dp"
         android:layout_marginTop="56dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/fragment_bucket"
@@ -66,10 +69,12 @@
         android:id="@+id/SearchText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="7dp"
         android:ems="10"
+        android:hint="Type in name"
         android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="7dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
