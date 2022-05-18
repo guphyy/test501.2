@@ -11,10 +11,11 @@
         android:id="@+id/bt_main_create_new_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
         android:onClick="onClick"
-        android:text="create new project"
+        android:text="new project"
+        app:icon="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.878"
@@ -30,7 +31,8 @@
         android:text="log out"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -68,7 +70,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Type in name"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="7dp" />
 

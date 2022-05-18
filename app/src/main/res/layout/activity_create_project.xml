@@ -148,16 +148,7 @@
                         android:inputType="text"
                         android:text="onGoing" />
 
-                    <Button
-                        android:id="@+id/bt_registeractivity_add"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/selector_loginactivity_button"
-                        android:onClick="onClick"
-                        android:text="ADD"
-                        android:textColor="#fff" />
+
 
                     <LinearLayout
                         android:id="@+id/add_here"
@@ -168,6 +159,17 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                     </LinearLayout>
+                    <Button
+                        android:id="@+id/bt_registeractivity_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/selector_loginactivity_button"
+                        android:onClick="onClick"
+                        app:icon="@drawable/ic_add"
+                        android:text="New Task"
+                        android:textColor="#fff" />
 
                     <Button
                         android:id="@+id/bt_registeractivity_register"

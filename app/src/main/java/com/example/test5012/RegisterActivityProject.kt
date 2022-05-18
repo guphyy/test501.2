@@ -161,7 +161,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 temp++
                 var myFlowLayout = findViewById<LinearLayout>(R.id.add_here)
                 var title = TextView(this)
-                title.text = "Task 2"
+                title.text = "Task $temp"
 
                 var registerTask = EditText(this)
                 registerTask.hint = "Please describe next task$temp"
