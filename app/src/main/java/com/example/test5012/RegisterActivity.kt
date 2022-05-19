@@ -58,9 +58,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                     identity = "worker"
                 }
                 if(password == password2) {
-                    if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(
-                            email)
-                    ) {
+                    if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(email)) {
                         if (!username.contains(",")) {
                             //sent info to database
                             if (identity != null) {
@@ -69,18 +67,14 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                             val intent2 = Intent(this, LoginActivity::class.java)
                             startActivity(intent2)
                             finish()
-                            Toast.makeText(
-                                this,
-                                "Verification passed, registration successful",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this, "Verification passed, registration successful", Toast.LENGTH_SHORT).show()
                             val hashMap = hashMapOf<String, Any?>(
                                 "username" to username,
                                 "password" to password,
                                 "identity" to identity,
                                 "email" to email
 
-                            )
+                            ) //make hasmap of data
                             RegisterActivityProject.FirebaseUtils().fireStoreDatabase.collection("user")
                                 .document("User: $username")
                                 .set(hashMap)
@@ -96,21 +90,21 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                                 "user names can not contain commas",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }
+                        }//error check
                     } else {
                         Toast.makeText(
                             this,
                             "Not perfect information, registration failed",
                             Toast.LENGTH_SHORT
                         ).show()
-                    }
+                    }//error check
                 }else{
                     Toast.makeText(
                         this,
                         "Passwords do not match",
                         Toast.LENGTH_SHORT
                     ).show()
-                }
+                }//error check
 
             }
         }

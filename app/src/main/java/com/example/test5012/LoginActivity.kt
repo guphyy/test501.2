@@ -82,7 +82,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         val posistion :String = data[i].getIdentity()!!
                         intent.putExtra("user",username)
                         intent.putExtra("position",posistion)
-                        intent
                         startActivity(intent)
                         finish() //销毁此Activity
                     } else {
@@ -91,14 +90,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             "User name or password is incorrect, please re-enter",
                             Toast.LENGTH_SHORT
                         ).show()
-                    }
+                    }// error check
                 } else {
                     Toast.makeText(
                         this,
                         "Please enter your username or password",
                         Toast.LENGTH_SHORT
                     ).show()
-                }
+                }// error check
             }
         }
     }

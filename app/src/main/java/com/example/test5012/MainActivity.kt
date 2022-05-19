@@ -417,7 +417,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 //val uv: TextView = findViewById(1000+i)//1000-1999 is the user name, not needed unless manager gets access
                 val pv: TextView = findViewById(2000+i)//2000+ is the project name, this was invisible before
 
-
                 val taskName = pv.text.toString()
                 val fb = FirebaseUtils().fireStoreDatabase.collection("projects").document("project: $taskName")//opens up the task
                     fb.get().addOnSuccessListener { document ->
