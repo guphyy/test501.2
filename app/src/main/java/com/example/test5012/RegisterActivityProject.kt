@@ -212,7 +212,7 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 */
                 val addNewTaskBtn = Button(this)
                 addNewTaskBtn.text = "confirm task"
-                addNewTaskBtn.width = 250
+                addNewTaskBtn.width = 100
 
                 addNewTaskBtn.setOnClickListener {
                     val projectName = mEtRegisterActivityProjectname!!.text.toString().trim() { it <= ' ' }

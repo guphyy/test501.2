@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     horizontalListView2.addView(deadlineV)
                     horizontalListView2.addView(projNameView)
                     if (((!manager) && (stateText == "onGoing" || stateText == "incomplete" || stateText == "registered"))) {
-                        button.text = "Press when task is complete"
+                        button.text = "Check!"
                         horizontalListView2.addView(button)
                     }
                     list.addView(horizontalListView2)
@@ -174,6 +174,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 horizontalListView.addView(workerView)
                 list.addView(horizontalListView)
+                horizontalListView2.orientation = VERTICAL
                 horizontalListView2.addView(statusView)
                 horizontalListView2.addView(deadlineV)
                 horizontalListView2.addView(projNameView)
@@ -213,8 +214,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var manager = false
         searchUser.isVisible = false
         searchText.isVisible = false
-        workerName.text = "Logged in as $user"
-        workerName.textSize = 30f
+        workerName.text = "Hello! $user"
+        workerName.textSize = 20f
         workerName.isVisible = true
         if (pos == "manager"){
             workerName.isVisible = false

@@ -28,7 +28,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="19dp"
                 android:layout_marginEnd="266dp"
-                android:text="Login"
+                android:text=""
                 android:textColor="#000"
                 android:textSize="20dp" />
 
@@ -59,6 +59,13 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             >
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/login3_pic_round"
+
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="307dp"
+            android:layout_marginTop="500dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/selector_loginactivity_button"
             android:gravity="center"
