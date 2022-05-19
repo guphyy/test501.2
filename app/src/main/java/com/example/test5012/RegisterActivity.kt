@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     private var mDBOpenHelper: DBOpenHelper? = null
     private var mEtRegisteractivityUsername: EditText? = null
+    private var mEtRegisteractivityPassword1: EditText? = null
     private var mEtRegisteractivityPassword2: EditText? = null
     private var mEtRegisteractivityEmail: EditText? = null
     private var mPositionChoose_worker: RadioButton? = null
@@ -27,6 +28,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         val mBtRegisteractivityRegister = findViewById<Button>(R.id.bt_registeractivity_register)
         val mIvRegisteractivityBack = findViewById<ImageView>(R.id.iv_registeractivity_back)
         mEtRegisteractivityUsername = findViewById(R.id.et_registeractivity_username)
+        mEtRegisteractivityPassword1 = findViewById(R.id.et_registeractivity_password1)
         mEtRegisteractivityPassword2 = findViewById(R.id.et_registeractivity_password2)
         mEtRegisteractivityEmail = findViewById(R.id.et_registeractivity_email)
         mPositionChoose_worker = findViewById(R.id.radioButton_worker)
@@ -46,7 +48,8 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
             R.id.bt_registeractivity_register -> {
                 //get info
                 val username = mEtRegisteractivityUsername!!.text.toString().trim { it <= ' ' }
-                val password = mEtRegisteractivityPassword2!!.text.toString().trim { it <= ' ' }
+                val password = mEtRegisteractivityPassword1!!.text.toString().trim { it <= ' ' }
+                val password2 = mEtRegisteractivityPassword2!!.text.toString().trim { it <= ' ' }
                 val email = mEtRegisteractivityEmail!!.text.toString().trim { it <= ' ' }
                 var identity: String? = null
                 if (mPositionChoose_manager!!.isChecked){
@@ -54,45 +57,61 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 }else if (mPositionChoose_worker!!.isChecked){
                     identity = "worker"
                 }
-                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(email)) {
+                if(password == password2) {
+                    if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(
+                            email)
+                    ) {
+                        if (!username.contains(",")) {
+                            //sent info to database
+                            if (identity != null) {
+                                mDBOpenHelper!!.add(username, password, identity, email)
+                            }
+                            val intent2 = Intent(this, LoginActivity::class.java)
+                            startActivity(intent2)
+                            finish()
+                            Toast.makeText(
+                                this,
+                                "Verification passed, registration successful",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val hashMap = hashMapOf<String, Any?>(
+                                "username" to username,
+                                "password" to password,
+                                "identity" to identity,
+                                "email" to email
 
-                    //sent info to database
-                    if (identity != null) {
-                        mDBOpenHelper!!.add(username, password, identity, email)
-                    }
-                    val intent2 = Intent(this, LoginActivity::class.java)
-                    startActivity(intent2)
-                    finish()
-                    Toast.makeText(
-                        this,
-                        "Verification passed, registration successful",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                } else {
-                    Toast.makeText(
+                            )
+                            RegisterActivityProject.FirebaseUtils().fireStoreDatabase.collection("user")
+                                .document("User: $username")
+                                .set(hashMap)
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "Added document with ID $username")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w(TAG, "Error adding document $exception")
+                                }
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "user names can not contain commas",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Toast.makeText(
                             this,
                             "Not perfect information, registration failed",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+                }else{
+                    Toast.makeText(
+                        this,
+                        "Passwords do not match",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-                val hashMap = hashMapOf<String, Any?>(
-                    "username" to username,
-                    "password" to password,
-                    "identity" to identity,
-                    "email" to email
-
-                )
-                RegisterActivityProject.FirebaseUtils().fireStoreDatabase.collection("user")
-                    .document("User: $username")
-                    .set(hashMap)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Added document with ID $username")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.w(TAG, "Error adding document $exception")
-                    }
             }
         }
     }

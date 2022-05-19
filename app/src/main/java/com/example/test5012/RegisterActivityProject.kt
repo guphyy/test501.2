@@ -3,16 +3,12 @@ package com.example.test5012
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.iterator
-import kotlin.reflect.typeOf
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.Date
 import java.util.*
 
 
@@ -71,8 +67,13 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
         mIvRegisteractivityBack.setOnClickListener(this)
         mBtRegisteractivityRegister.setOnClickListener(this)
 
-
-
+        workerList = arrayListOf<String>()
+        taskList = arrayListOf<String>()
+        stateList = arrayListOf<String>()
+        ddlList = arrayListOf<String>()
+        emailList = arrayListOf<String>()
+        valueList = arrayListOf<Int>()
+        // should reset the values
 
     }
     private fun dateSort(dateList: ArrayList<String?>, newDate: String){
@@ -111,26 +112,66 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 val managerName = intent.getStringExtra("managername").toString()
                 println(managerName)
                 val projectState = "registered"
-                workerList.add(worker)
-                taskList.add(task)
-                stateList.add(state)
-                ddlList.add(taskDeadline)
-                emailList.add(email)
 
-                if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(projectDeadline) && !TextUtils.isEmpty(task) && !TextUtils.isEmpty(worker) && !TextUtils.isEmpty(state)) {
-                    mDBOpenHelperProject!!.add(projectName, projectDeadline, task, worker, state)
-                    //val intent5 = Intent(this, MainActivity::class.java)
-                    //intent2.putExtra("user",)
-                    val pos :String= intent.getStringExtra("managerPos").toString()
-                    var name:String = intent.getStringExtra("managername").toString()
-                    //startActivity(Intent(this, MainActivity::class.java).putExtra("username_back",name).putExtra("pos_back",pos))
 
-                    //finish()
-                    Toast.makeText(
-                        this,
-                        "Complete information and successful registration",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (!TextUtils.isEmpty(projectName) &&
+                    !TextUtils.isEmpty(projectDeadline) &&
+                    !TextUtils.isEmpty(task) &&
+                    !TextUtils.isEmpty(worker) &&
+                    !TextUtils.isEmpty(state)) {
+                    if (worker.contains(",")) {
+                        if (!taskList.contains(task)) {
+                            mDBOpenHelperProject!!.add(projectName,
+                                projectDeadline,
+                                task,
+                                worker,
+                                state)
+                            //val intent5 = Intent(this, MainActivity::class.java)
+                            //intent2.putExtra("user",)
+                            val pos: String = intent.getStringExtra("managerPos").toString()
+                            var name: String = intent.getStringExtra("managername").toString()
+                            //startActivity(Intent(this, MainActivity::class.java).putExtra("username_back",name).putExtra("pos_back",pos))
+
+                            //finish()
+                            Toast.makeText(
+                                this,
+                                "Complete information and successful registration",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val hashMap = hashMapOf<String, Any>(
+                                "projectName" to projectName,
+                                "deadline" to projectDeadline,
+                                "project_state" to projectState,
+                                "task" to taskList,
+                                "taskDdl" to ddlList,
+                                "worker" to workerList,
+                                "emails" to emailList,
+                                "state" to stateList,
+                                "submit_by" to managerName
+                            )
+                            FirebaseUtils().fireStoreDatabase.collection("projects")
+                                .document("project: $projectName")
+                                .set(hashMap)
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "Added document with ID $projectName")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w(TAG, "Error adding document $exception")
+                                }
+                            val intent4 = Intent(this, MainActivity::class.java)
+                            println("Going back from activity $managerName")
+                            intent4.putExtra("user", managerName)
+                            intent4.putExtra("position", "manager")
+                            startActivity(intent4)
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Tasks must be unique", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }else{
+                        Toast.makeText(this, "worker names must not contain commas", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }else{
                     Toast.makeText(
                         this,
@@ -138,32 +179,6 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                val hashMap = hashMapOf<String, Any>(
-                    "projectName" to projectName,
-                    "deadline" to projectDeadline,
-                    "project_state" to projectState,
-                    "task" to taskList,
-                    "taskDdl" to ddlList,
-                    "worker" to workerList,
-                    "emails" to emailList,
-                    "state" to stateList,
-                    "submit_by" to managerName
-                )
-                FirebaseUtils().fireStoreDatabase.collection("projects")
-                    .document("project: $projectName")
-                    .set(hashMap)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Added document with ID $projectName")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.w(TAG, "Error adding document $exception")
-                    }
-                val intent4 = Intent(this, MainActivity::class.java)
-                println("Going back from activity $managerName")
-                intent4.putExtra("user",managerName)
-                intent4.putExtra("position","manager")
-                startActivity(intent4)
-                finish()
             }
 
 
@@ -172,31 +187,31 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 temp++
                 var myFlowLayout = findViewById<LinearLayout>(R.id.add_here)
                 var title = TextView(this)
-                title.text = "Task 2"
+                title.text = "Task $temp"
 
                 var registerTask = EditText(this)
-                registerTask.hint = "Please describe next task$temp"
+                registerTask.hint = "Please describe next task $temp"
                 //registerTask.setText("idle")
                 registerTask.width = 1000
                 registerTask.tag = temp
                 registerTask.id = R.id.task_add
 
                 val registerWorker = EditText(this)
-                registerWorker.hint = "Please select next worker$temp"
+                registerWorker.hint = "Please select next worker for task $temp"
                 //registerWorker.setText("idle")
                 registerWorker.width = 1000
                 registerWorker.tag = temp
                 registerWorker.id = R.id.worker_add
 
                 val registerWorkerEmail = EditText(this)
-                registerWorkerEmail.hint = "Please enter email of worker$temp"
+                registerWorkerEmail.hint = "Please enter email of worker"
                 //registerWorkerEmail.setText("idle")
                 registerWorkerEmail.width = 1000
                 registerWorkerEmail.tag = temp
                 registerWorkerEmail.id = R.id.worker_email_add
 
                 val registerDDL = EditText(this)
-                registerDDL.hint = "Please input deadline of task$temp"
+                registerDDL.hint = "Please input deadline of task $temp"
                 //registerDDL.setText("idle")
                 registerDDL.width = 1000
                 registerDDL.tag = temp
@@ -210,11 +225,11 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                 registerState.tag = temp
                 registerState.id = R.id.status_add
                 */
-                val addNewTaskBtn = Button(this)
-                addNewTaskBtn.text = "confirm task"
-                addNewTaskBtn.width = 100
+                val confirmNewTaskBtn = Button(this)
+                confirmNewTaskBtn.text = "confirm task"
+                confirmNewTaskBtn.width = 100
 
-                addNewTaskBtn.setOnClickListener {
+                confirmNewTaskBtn.setOnClickListener {
                     val projectName = mEtRegisterActivityProjectname!!.text.toString().trim() { it <= ' ' }
                     val deadline = mEtRegisterActivityDeadline!!.text.toString().trim() { it <= ' ' }
                     val taskAdd = registerTask.text.toString().trim() { it <= ' ' }
@@ -222,35 +237,53 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     val emailAdd = registerWorkerEmail.text.toString().trim() { it <= ' ' }
                     val stateAdd = "incomplete"
                     val ddlOftasks = registerDDL.text.toString().trim() {it <= ' '}
-                    workerList.add(workerAdd)
-                    emailList.add(emailAdd)
-                    taskList.add(taskAdd)
-                    stateList.add(stateAdd)
-                    ddlList.add(ddlOftasks)
-                    //sentEmailTo(emailAdd, workerAdd)
-                    if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(
-                            taskAdd
-                        ) && !TextUtils.isEmpty(workerAdd) && !TextUtils.isEmpty(stateAdd)
-                    ) {
-                        mDBOpenHelperProject!!.add(
-                            projectName,
-                            deadline,
-                            taskAdd,
-                            workerAdd,
-                            stateAdd
-                        )
+                    val b1 =!workerAdd.isEmpty() && !deadline.isEmpty() && !taskAdd.isEmpty() &&!emailAdd.isEmpty() &&!ddlOftasks.isEmpty()
+                    if(b1) {
+                        if (!workerAdd.contains(",")) {
+
+
+                            if (!taskList.contains(taskAdd)) {
+                                workerList.add(workerAdd)
+                                emailList.add(emailAdd)
+                                taskList.add(taskAdd)
+                                stateList.add(stateAdd)
+                                ddlList.add(ddlOftasks)
+                                if (!TextUtils.isEmpty(projectName) && !TextUtils.isEmpty(deadline) && !TextUtils.isEmpty(
+                                        taskAdd
+                                    ) && !TextUtils.isEmpty(workerAdd) && !TextUtils.isEmpty(
+                                        stateAdd)
+                                ) {
+                                    mDBOpenHelperProject!!.add(
+                                        projectName,
+                                        deadline,
+                                        taskAdd,
+                                        workerAdd,
+                                        stateAdd
+                                    )
+                                }
+                            } else {
+                                Toast.makeText(this, "Tasks must be unique", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        } else {
+                            Toast.makeText(this, "Names can not contain commas", Toast.LENGTH_SHORT).show()
+                        }
+                    }else{
+                        Toast.makeText(this, "Fill in all fields before confiming task", Toast.LENGTH_SHORT).show()
                     }
+                    //sentEmailTo(emailAdd, workerAdd)
+
                 }
 
 
 
 
                 myFlowLayout.addView(title)
-                myFlowLayout.addView(registerTask)
                 myFlowLayout.addView(registerWorker)
                 myFlowLayout.addView(registerWorkerEmail)
+                myFlowLayout.addView(registerTask)
                 myFlowLayout.addView(registerDDL)
-                myFlowLayout.addView(addNewTaskBtn)
+                myFlowLayout.addView(confirmNewTaskBtn)
 
 
                 myFlowLayout.invalidate()

@@ -63,7 +63,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/login3_pic_round"
+                android:src="@drawable/login3_pic_round"
 
                 />
             <LinearLayout

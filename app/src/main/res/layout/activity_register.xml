@@ -36,7 +36,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/iv_registeractivity_back"
                 android:text="Registration page"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:textSize="20dp" />
         </RelativeLayout>
 
