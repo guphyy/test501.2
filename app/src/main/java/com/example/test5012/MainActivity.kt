@@ -82,10 +82,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             for (j in 0 until workerList.size) {
                 val b1 = workerList[j].toString() == user
                 val b2 = projectManager == user
-                if ((!manager && b1) || (manager && b2)) {
+                if ((b1) || (manager && b2)) {
                     //set up views
                     val horizontalListView = LinearLayout(this)
                     val horizontalListView2 = LinearLayout(this)
+                    val horizontalListView3 = LinearLayout(this)
                     val taskView = TextView(this)
                     val statusView = TextView(this)
                     val workerView = TextView(this)
@@ -119,17 +120,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     //add views
                     button.setOnClickListener(this)
                     horizontalListView.addView(taskView)
-                    horizontalListView.addView(workerView)
                     list.addView(horizontalListView)
-
+                    horizontalListView2.addView(workerView)
                     horizontalListView2.addView(statusView)
                     horizontalListView2.addView(deadlineV)
                     horizontalListView2.addView(projNameView)
                     if (((!manager) && (stateText == "onGoing" || stateText == "incomplete" || stateText == "registered"))) {
                         button.text = "Check!"
-                        horizontalListView2.addView(button)
+                        horizontalListView3.addView(button)
                     }
                     list.addView(horizontalListView2)
+                    list.addView(horizontalListView3)
                 }
 
             }
