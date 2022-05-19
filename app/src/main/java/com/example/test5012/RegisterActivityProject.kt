@@ -119,13 +119,18 @@ class RegisterActivityProject : AppCompatActivity(), View.OnClickListener {
                     !TextUtils.isEmpty(task) &&
                     !TextUtils.isEmpty(worker) &&
                     !TextUtils.isEmpty(state)) {
-                    if (worker.contains(",")) {
+                    if (!worker.contains(",")) {
                         if (!taskList.contains(task)) {
                             mDBOpenHelperProject!!.add(projectName,
                                 projectDeadline,
                                 task,
                                 worker,
                                 state)
+                            workerList.add(worker)
+                            emailList.add(email)
+                            taskList.add(task)
+                            stateList.add(state)
+                            ddlList.add(taskDeadline)
                             //val intent5 = Intent(this, MainActivity::class.java)
                             //intent2.putExtra("user",)
                             val pos: String = intent.getStringExtra("managerPos").toString()
